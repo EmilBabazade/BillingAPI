@@ -15,5 +15,15 @@ namespace BillingAPI.Controllers
         {
             _mapper = mapper;
         }
+
+        [HttpPost]
+        public IActionResult ProcessOrder()
+        {
+            // TODO: create payment
+            // TODO: create order
+            // TODO: create balance
+            // TODO: update gateway
+            // TODO: update user
+        }
     }
 }
