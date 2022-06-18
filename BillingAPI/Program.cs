@@ -1,4 +1,5 @@
 using BillingAPI.Extensions.ServiceExtensions;
+using BillingAPI.Middlewares;
 
 WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
