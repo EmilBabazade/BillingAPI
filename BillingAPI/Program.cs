@@ -1,4 +1,6 @@
-var builder = WebApplication.CreateBuilder(args);
+using BillingAPI.Extensions.ServiceExtensions;
+
+WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -6,8 +8,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddRepositories(builder.Configuration);
+builder.Services.AddHelpers(builder.Configuration);
 
-var app = builder.Build();
+WebApplication? app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

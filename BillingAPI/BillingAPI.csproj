@@ -14,7 +14,6 @@
     <Folder Include="Controllers\" />
     <Folder Include="Helpers\" />
     <Folder Include="Middlewares\" />
-    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>
