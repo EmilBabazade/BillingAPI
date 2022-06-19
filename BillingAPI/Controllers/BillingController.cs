@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BillingAPI.Data.interfaces;
+using BillingAPI.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillingAPI.Controllers
@@ -9,15 +11,17 @@ namespace BillingAPI.Controllers
     [ApiController]
     public class BillingController : ControllerBase
     {
+        private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
 
-        public BillingController(IMapper mapper)
+        public BillingController(IUnitOfWork uow, IMapper mapper)
         {
+            _uow = uow;
             _mapper = mapper;
         }
 
         [HttpPost]
-        public IActionResult ProcessOrder()
+        public ActionResult<ReceiptDTO> ProcessOrder(ProcessOrderDTO processOrderDTO)
         {
             // TODO: create payment
             // TODO: create order

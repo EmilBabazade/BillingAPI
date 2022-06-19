@@ -14,7 +14,7 @@ namespace BillingAPI.Data
 
         public IGatewayRepository GatewayRepository => new GatewayRepository(_dataContext);
 
-        public IOrderRepository OrderRepository => new OrderRepository(_dataContext);
+        public IOrderRepository OrderRepository => new OrderRepository(_dataContext, GatewayRepository, UserRepository);
 
         public IPaymentRepository PaymentRepository => new PaymentRepository(_dataContext);
 

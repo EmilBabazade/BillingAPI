@@ -46,6 +46,13 @@ namespace BillingAPI.Data
             return balance;
         }
 
+        public async Task<Balance> GetUserBalance(int userId)
+        {
+            Balance? output = await _dataContext.Balances.SingleOrDefaultAsync(b => b.UserId == userId);
+            if (output == null) throw new NotFoundException("Balance not found");
+            return output;
+        }
+
         public async Task Update(Balance balance)
         {
             if (!await CheckExists(balance.Id)) throw new NotFoundException("Balance not found");

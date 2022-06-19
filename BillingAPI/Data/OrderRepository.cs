@@ -1,4 +1,5 @@
 ﻿using BillingAPI.Data.interfaces;
+using BillingAPI.DTOs;
 using BillingAPI.Entities;
 using BillingAPI.Errors;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +9,15 @@ namespace BillingAPI.Data
     public class OrderRepository : IOrderRepository
     {
         private readonly DataContext _dataContext;
+        private readonly IGatewayRepository _gatewayRepository;
+        private readonly IUserRepository _userRepository;
 
-        public OrderRepository(DataContext dataContext)
+        public OrderRepository(DataContext dataContext, IGatewayRepository gatewayRepository,
+            IUserRepository userRepository)
         {
             _dataContext = dataContext;
+            _gatewayRepository = gatewayRepository;
+            _userRepository = userRepository;
         }
         public async Task Add(Order order)
         {
@@ -54,6 +60,21 @@ namespace BillingAPI.Data
         private async Task<bool> CheckExists(int id)
         {
             return await _dataContext.Orders.AnyAsync(b => b.Id == id);
+        }
+
+        public async Task<ReceiptDTO> ProcessNewOrder(ProcessOrderDTO processOrderDTO)
+        {
+            // check order number is unique
+            if (_dataContext.Orders.Any(o => o.No.Trim() == processOrderDTO.OrderNumber.Trim()))
+            {
+                throw new BadRequestException("An order with the given order number already exists");
+            }
+            // get gateway
+            Gateway gateway = await _gatewayRepository.GetById(processOrderDTO.GatewayId);
+            // get user
+            User user = await _userRepository.GetById(processOrderDTO.UserId);
+            // check user has enough balance
+            throw new NotImplementedException();
         }
     }
 }

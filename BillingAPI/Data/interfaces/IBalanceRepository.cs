@@ -9,5 +9,6 @@ namespace BillingAPI.Data.interfaces
         public Task<IEnumerable<Balance>> GetAll(string order = "");
         public Task<Balance> GetById(int id);
         public void DeleteById(int id);
+        public Task<Balance> GetUserBalance(int userId);
     }
 }

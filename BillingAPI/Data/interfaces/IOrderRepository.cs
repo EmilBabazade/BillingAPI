@@ -1,4 +1,5 @@
-﻿using BillingAPI.Entities;
+﻿using BillingAPI.DTOs;
+using BillingAPI.Entities;
 
 namespace BillingAPI.Data.interfaces
 {
@@ -9,5 +10,6 @@ namespace BillingAPI.Data.interfaces
         public Task<IEnumerable<Order>> GetAll(string order = "");
         public Task<Order> GetById(int id);
         public void DeleteById(int id);
+        public Task<ReceiptDTO> ProcessNewOrder(ProcessOrderDTO processOrderDTO);
     }
 }
