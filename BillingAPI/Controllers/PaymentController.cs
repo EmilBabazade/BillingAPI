@@ -19,6 +19,11 @@ namespace BillingAPI.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// get all payments
+        /// </summary>
+        /// <param name="order">"asc" for ascending, "desc" for descending</param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<PaymentDTO>> GetAll(string? order)
         {

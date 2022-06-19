@@ -2,6 +2,7 @@ using BillingAPI.Data;
 using BillingAPI.Extensions;
 using BillingAPI.Middlewares;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,12 @@ WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "BillingApi", Version = "v1" });
+    var path = Path.Combine(AppContext.BaseDirectory, "BillingApi.xml");
+    options.IncludeXmlComments(path);
+});
 builder.Services.AddApplicationServices(builder.Configuration);
 
 WebApplication? app = builder.Build();
