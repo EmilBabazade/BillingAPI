@@ -8,8 +8,10 @@
         public string? Description { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? LastUpdatedAt { get; set; }
+        public int GatewayId { get; set; }
         public Gateway Gateway { get; set; }
         public Payment Payment { get; set; }
+        public int UserId { get; set; }
         public User User { get; set; }
     }
 }

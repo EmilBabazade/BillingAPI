@@ -24,6 +24,7 @@ namespace BillingAPI.Controllers
             // TODO: create balance
             // TODO: update gateway
             // TODO: update user
+            throw new NotImplementedException();
         }
     }
 }
