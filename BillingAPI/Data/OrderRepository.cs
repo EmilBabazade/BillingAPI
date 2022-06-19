@@ -11,13 +11,18 @@ namespace BillingAPI.Data
         private readonly DataContext _dataContext;
         private readonly IGatewayRepository _gatewayRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IBalanceRepository _balanceRepository;
+        private readonly IPaymentRepository _paymentRepository;
 
         public OrderRepository(DataContext dataContext, IGatewayRepository gatewayRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository, IBalanceRepository balanceRepository,
+            IPaymentRepository paymentRepository)
         {
             _dataContext = dataContext;
             _gatewayRepository = gatewayRepository;
             _userRepository = userRepository;
+            _balanceRepository = balanceRepository;
+            _paymentRepository = paymentRepository;
         }
         public async Task Add(Order order)
         {
@@ -74,7 +79,57 @@ namespace BillingAPI.Data
             // get user
             User user = await _userRepository.GetById(processOrderDTO.UserId);
             // check user has enough balance
-            throw new NotImplementedException();
+            Balance userBalance = await _balanceRepository.GetUserBalance(processOrderDTO.UserId);
+            if (userBalance.Amount < processOrderDTO.PayableAmount)
+            {
+                await _paymentRepository.Add(new Payment
+                {
+                    Amount = processOrderDTO.PayableAmount,
+                    Description = processOrderDTO.Description,
+                    GatewayId = processOrderDTO.GatewayId,
+                    UserId = processOrderDTO.UserId,
+                    IsSuccessfull = false
+                });
+                throw new BadRequestException("User does not have enough balance");
+            }
+            // create new payment and new order
+            Payment payment = new Payment
+            {
+                Amount = processOrderDTO.PayableAmount,
+                Description = processOrderDTO.Description,
+                GatewayId = processOrderDTO.GatewayId,
+                UserId = processOrderDTO.UserId,
+                IsSuccessfull = true
+            };
+            await _paymentRepository.Add(payment);
+            Order order = new Order
+            {
+                Description = processOrderDTO.Description,
+                GatewayId = processOrderDTO.GatewayId,
+                No = processOrderDTO.OrderNumber,
+                PayableAmount = processOrderDTO.PayableAmount,
+                PaymentId = payment.Id,
+                UserId = processOrderDTO.UserId
+            };
+            await _paymentRepository.Add(payment);
+            // subtract from user balance
+            Balance? balance = new Balance
+            {
+                Amount = userBalance.Amount - processOrderDTO.PayableAmount,
+                PaymentId = payment.Id,
+                UserId = user.Id
+            };
+            await _balanceRepository.Add(balance);
+            // return the receipt
+            return new ReceiptDTO
+            {
+                Date = order.CreatedAt,
+                OrderNo = order.No,
+                PaidAmount = order.PayableAmount,
+                UserEmail = user.Email,
+                UserName = user.Name,
+                UserSurname = user.Surname
+            };
         }
     }
 }

@@ -23,12 +23,7 @@ namespace BillingAPI.Controllers
         [HttpPost]
         public ActionResult<ReceiptDTO> ProcessOrder(ProcessOrderDTO processOrderDTO)
         {
-            // TODO: create payment
-            // TODO: create order
-            // TODO: create balance
-            // TODO: update gateway
-            // TODO: update user
-            throw new NotImplementedException();
+            return Ok(_uow.OrderRepository.ProcessNewOrder(processOrderDTO));
         }
     }
 }

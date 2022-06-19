@@ -13,6 +13,7 @@ namespace BillingAPI.Entities
         public DateTime? LastUpdatedAt { get; set; }
         public int GatewayId { get; set; }
         public Gateway Gateway { get; set; }
+        public int PaymentId { get; set; }
         public Payment Payment { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
