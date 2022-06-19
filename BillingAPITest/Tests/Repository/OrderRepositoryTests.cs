@@ -1,4 +1,5 @@
 ﻿using BillingAPI.Data;
+using BillingAPI.DTOs;
 using BillingAPI.Entities;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,8 @@ namespace BillingAPITest.Tests.Repository
         public void SetupRepository()
         {
             _orderRepository = new OrderRepository(
-                _dataContext, new GatewayRepository(_dataContext), new UserRepository(_dataContext)
+                _dataContext, new GatewayRepository(_dataContext), new UserRepository(_dataContext),
+                new BalanceRepository(_dataContext), new PaymentRepository(_dataContext)
                 );
         }
 
@@ -202,6 +204,185 @@ namespace BillingAPITest.Tests.Repository
 
             // Assert
             type.Should().Be("BillingAPI.Errors.NotFoundException");
+        }
+
+        // processing order with existing order no should throw badrequest exception
+        [Test]
+        public async Task ProcessingOrderWithExistingOrderNoThrowsBadRequestException()
+        {
+            // Arrange
+            ProcessOrderDTO? processOrderDTO = new ProcessOrderDTO
+            {
+                Description = "hello",
+                GatewayId = _gateways[0].Id,
+                OrderNumber = _orders[0].No,
+                PayableAmount = 40,
+                UserId = _users[0].Id,
+            };
+            string? type = "";
+
+            // Act
+            try
+            {
+                await _orderRepository.ProcessNewOrder(processOrderDTO);
+            }
+            catch (Exception ex)
+            {
+                type = ex.GetType()?.FullName;
+            }
+
+
+            // Assert
+            type.Should().Be("BillingAPI.Errors.BadRequestException");
+        }
+        // processing order with unexisting gateway should throw notfound exception
+        [Test]
+        public async Task ProcessingOrderWithUnexistingGatewayThrowsNotFoundException()
+        {
+            // Arrange
+            ProcessOrderDTO? processOrderDTO = new ProcessOrderDTO
+            {
+                Description = "hello",
+                GatewayId = -9999,
+                OrderNumber = "hello",
+                PayableAmount = 40,
+                UserId = _users[0].Id,
+            };
+            string? type = "";
+
+            // Act
+            try
+            {
+                await _orderRepository.ProcessNewOrder(processOrderDTO);
+            }
+            catch (Exception ex)
+            {
+                type = ex.GetType()?.FullName;
+            }
+
+
+            // Assert
+            type.Should().Be("BillingAPI.Errors.NotFoundException");
+        }
+
+        // processing order with unexisting user should throw notfound exception
+        [Test]
+        public async Task ProcessingOrderWithUnexistingUserThrowsNotFoundException()
+        {
+            // Arrange
+            ProcessOrderDTO? processOrderDTO = new ProcessOrderDTO
+            {
+                Description = "hello",
+                GatewayId = _gateways[0].Id,
+                OrderNumber = "hello",
+                PayableAmount = 40,
+                UserId = -9999,
+            };
+            string? type = "";
+
+            // Act
+            try
+            {
+                await _orderRepository.ProcessNewOrder(processOrderDTO);
+            }
+            catch (Exception ex)
+            {
+                type = ex.GetType()?.FullName;
+            }
+
+
+            // Assert
+            type.Should().Be("BillingAPI.Errors.NotFoundException");
+        }
+
+        // if user doesn't have enough balance when creating order, unsuccesfful payment should be created and badrequest exception
+        //should be thrown
+        [Test]
+        public async Task ProcessingOrderWithNotEnoughBalanceThrowsBadRequestExceptionAndCreationUnsuccesfullPayment()
+        {
+            // Arrange
+            ProcessOrderDTO? processOrderDTO = new ProcessOrderDTO
+            {
+                Description = "hello",
+                GatewayId = _gateways[0].Id,
+                OrderNumber = "hello",
+                PayableAmount = 40000,
+                UserId = _users[0].Id,
+            };
+            string? type = "";
+            int oldCount = _payments.Count;
+
+            // Act
+            try
+            {
+                await _orderRepository.ProcessNewOrder(processOrderDTO);
+            }
+            catch (Exception ex)
+            {
+                type = ex.GetType()?.FullName;
+            }
+            await _dataContext.SaveChangesAsync();
+            List<Payment>? newPayments = await _dataContext.Payments.OrderByDescending(p => p.Id).ToListAsync();
+            Payment? newPayment = newPayments[0];
+
+            // Assert
+            type.Should().Be("BillingAPI.Errors.BadRequestException");
+            newPayments.Count.Should().Be(oldCount + 1);
+            newPayment.Amount.Should().Be(processOrderDTO.PayableAmount);
+            newPayment.IsSuccessfull.Should().Be(false);
+            newPayment.UserId.Should().Be(_users[0].Id);
+        }
+
+        // processing order with correct parameters should create a new order and return a correct receipt
+        [Test]
+        public async Task ProcessingOrderCreatesOrderAndPaymentAndDecreasesBalanceAndReturnsReceipt()
+        {
+            // Arrange
+            ProcessOrderDTO? processOrderDTO = new ProcessOrderDTO
+            {
+                Description = "hello",
+                GatewayId = _gateways[0].Id,
+                OrderNumber = "hello",
+                PayableAmount = 40,
+                UserId = _users[0].Id,
+            };
+            ReceiptDTO? expectedReceipt = new ReceiptDTO
+            {
+                OrderNo = processOrderDTO.OrderNumber,
+                PaidAmount = processOrderDTO.PayableAmount,
+                UserEmail = _users[0].Email,
+                UserName = _users[0].Name,
+                UserSurname = _users[0].Surname
+            };
+            int oldOrderCount = _orders.Count;
+            int oldPaymentCount = _payments.Count;
+            int oldBalanceCount = _balances.Count;
+
+            // Act
+            ReceiptDTO? receipt = await _orderRepository.ProcessNewOrder(processOrderDTO);
+            await _dataContext.SaveChangesAsync();
+            IEnumerable<Order>? ordersInDb = await _orderRepository.GetAll("desc");
+            expectedReceipt.Date = ordersInDb.Select(o => o).ToList()[0].CreatedAt.ToString();
+            List<Payment>? paymentsInDb = await _dataContext.Payments.OrderByDescending(o => o.Id).ToListAsync();
+            Payment? newPayment = paymentsInDb[0];
+            List<Balance>? balancesInDb = await _dataContext.Balances.OrderByDescending(o => o.Id).ToListAsync();
+            Balance? newBalance = balancesInDb[0];
+
+            // Assert
+            ordersInDb.Select(o => o).ToList().Count.Should().Be(oldOrderCount + 1);
+            paymentsInDb.Count.Should().Be(oldPaymentCount + 1);
+            balancesInDb.Count.Should().Be(oldBalanceCount + 1);
+            newBalance.Amount.Should().Be(_balances[0].Amount - processOrderDTO.PayableAmount);
+            newBalance.UserId.Should().Be(processOrderDTO.UserId);
+            newPayment.IsSuccessfull.Should().Be(true);
+            // below fails test even tho Should().Be() is not comparing the pointers ???
+            //receipt.Should().Be(expectedReceipt);
+            receipt.OrderNo.Should().Be(expectedReceipt.OrderNo);
+            receipt.PaidAmount.Should().Be(expectedReceipt.PaidAmount);
+            receipt.UserEmail.Should().Be(expectedReceipt.UserEmail);
+            receipt.UserName.Should().Be(expectedReceipt.UserName);
+            receipt.UserSurname.Should().Be(expectedReceipt.UserSurname);
+            receipt.Date.Should().Be(expectedReceipt.Date);
         }
     }
 }

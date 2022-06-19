@@ -21,9 +21,11 @@ namespace BillingAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ReceiptDTO> ProcessOrder(ProcessOrderDTO processOrderDTO)
+        public async Task<ActionResult<ReceiptDTO>> ProcessOrder(ProcessOrderDTO processOrderDTO)
         {
-            return Ok(_uow.OrderRepository.ProcessNewOrder(processOrderDTO));
+            ReceiptDTO output = await _uow.OrderRepository.ProcessNewOrder(processOrderDTO);
+            await _uow.SaveChanges();
+            return Ok(output);
         }
     }
 }

@@ -111,7 +111,7 @@ namespace BillingAPI.Data
                 PaymentId = payment.Id,
                 UserId = processOrderDTO.UserId
             };
-            await _paymentRepository.Add(payment);
+            await Add(order);
             // subtract from user balance
             Balance? balance = new Balance
             {
@@ -123,7 +123,7 @@ namespace BillingAPI.Data
             // return the receipt
             return new ReceiptDTO
             {
-                Date = order.CreatedAt,
+                Date = order.CreatedAt.ToString(),
                 OrderNo = order.No,
                 PaidAmount = order.PayableAmount,
                 UserEmail = user.Email,
