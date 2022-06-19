@@ -25,97 +25,122 @@ namespace BillingAPITest.Tests.Repository
         [TearDown]
         public async Task ClearData()
         {
-            _dataContext.Balances.RemoveRange();
-            _dataContext.Gateways.RemoveRange();
-            _dataContext.Orders.RemoveRange();
-            _dataContext.Payments.RemoveRange();
-            _dataContext.Users.RemoveRange();
+            // below code does not work with in memory database, it only works with real databases
+            //_dataContext.Database.ExecuteSqlRaw("DELETE FROM BALANCES");
+            //_dataContext.Database.ExecuteSqlRaw("DELETE FROM GATEWAYS");
+            //_dataContext.Database.ExecuteSqlRaw("DELETE FROM ORDERS");
+            //_dataContext.Database.ExecuteSqlRaw("DELETE FROM PAYMENTS");
+            //_dataContext.Database.ExecuteSqlRaw("DELETE FROM USERS");
+
+            _dataContext.Balances.RemoveRange(await _dataContext.Balances.ToListAsync());
+            _dataContext.Gateways.RemoveRange(await _dataContext.Gateways.ToListAsync());
+            _dataContext.Orders.RemoveRange(await _dataContext.Orders.ToListAsync());
+            _dataContext.Payments.RemoveRange(await _dataContext.Payments.ToListAsync());
+            _dataContext.Users.RemoveRange(await _dataContext.Users.ToListAsync());
             await _dataContext.SaveChangesAsync();
         }
+
+        protected List<Gateway> _gateways = new();
+        protected List<Balance> _balances = new();
+        protected List<User> _users = new();
+        protected List<Payment> _payments = new();
 
         [SetUp]
         public async Task SeedData()
         {
-            Gateway? gt1 = new Gateway
-            {
-                No = "gt1"
-            };
-            Gateway? gt2 = new Gateway
-            {
-                No = "gt2"
-            };
-            Gateway? gt3 = new Gateway
-            {
-                No = "gt3"
-            };
             // add gateways
-            _dataContext.AddRange(new List<Gateway> { gt1, gt2, gt3 });
+            _gateways = new List<Gateway>()
+            {
+                new Gateway
+                {
+                    No = "gt1"
+                },
+                new Gateway
+                {
+                    No = "gt2"
+                },
+                new Gateway
+                {
+                    No = "gt3"
+                }
+            };
+            _dataContext.AddRange(_gateways);
             // add users
-            User? u1 = new User
+            _users = new()
             {
-                Email = "bob@bob.com",
-                Name = "bob",
-                Surname = "bobby"
+                new User
+                {
+                    Email = "bob@bob.com",
+                    Name = "bob",
+                    Surname = "bobby"
+                },
+                new User
+                {
+                    Email = "bob2@bob.com",
+                    Name = "bob2",
+                    Surname = "bobby2"
+                },
+                new User
+                {
+                    Email = "bob3@bob.com",
+                    Name = "bob3",
+                    Surname = "bobby3"
+                },
             };
-            User? u2 = new User
-            {
-                Email = "bob2@bob.com",
-                Name = "bob2",
-                Surname = "bobby2"
-            };
-            User? u3 = new User
-            {
-                Email = "bob3@bob.com",
-                Name = "bob3",
-                Surname = "bobby3"
-            };
-            _dataContext.AddRange(new List<User> { u1, u2, u3 });
+            _dataContext.AddRange(_users);
             // add payments for balances
-            Payment? p1 = new Payment
+            _payments = new()
             {
-                Amount = 100,
-                Description = "adding to balance",
-                GatewayId = gt1.Id,
-                IsSuccessfull = true,
-                UserId = u1.Id
+                new Payment
+                {
+                    Amount = 100,
+                    Description = "adding to balance",
+                    GatewayId = _gateways[0].Id,
+                    IsSuccessfull = true,
+                    UserId = _users[0].Id
+                },
+                new Payment
+                {
+                    Amount = 150,
+                    Description = "adding to balance",
+                    GatewayId = _gateways[1].Id,
+                    IsSuccessfull = true,
+                    UserId = _users[1].Id
+                },
+                new Payment
+                {
+                    Amount = 50,
+                    Description = "adding to balance",
+                    GatewayId = _gateways[2].Id,
+                    IsSuccessfull = true,
+                    UserId = _users[2].Id
+                }
             };
-            Payment? p2 = new Payment
-            {
-                Amount = 150,
-                Description = "adding to balance",
-                GatewayId = gt2.Id,
-                IsSuccessfull = true,
-                UserId = u2.Id
-            };
-            Payment? p3 = new Payment
-            {
-                Amount = 50,
-                Description = "adding to balance",
-                GatewayId = gt3.Id,
-                IsSuccessfull = true,
-                UserId = u3.Id
-            };
-            _dataContext.AddRange(new List<Payment> { p1, p2, p3 });
+
+            _dataContext.AddRange(_users);
             // add balance
-            Balance? b1 = new Balance
+            _balances = new()
             {
-                Amount = p1.Amount,
-                PaymentId = p1.Id,
-                UserId = u1.Id
+                new Balance
+                {
+                    Amount = _payments[0].Amount,
+                    PaymentId = _payments[0].Id,
+                    UserId = _users[0].Id
+                },
+                new Balance
+                {
+                    Amount = _payments[1].Amount,
+                    PaymentId = _payments[1].Id,
+                    UserId = _users[1].Id
+                },
+                new Balance
+                {
+                    Amount = _payments[2].Amount,
+                    PaymentId = _payments[2].Id,
+                    UserId = _users[2].Id
+                },
             };
-            Balance? b2 = new Balance
-            {
-                Amount = p2.Amount,
-                PaymentId = p2.Id,
-                UserId = u2.Id
-            };
-            Balance? b3 = new Balance
-            {
-                Amount = p2.Amount,
-                PaymentId = p2.Id,
-                UserId = u2.Id
-            };
-            _dataContext.AddRange(new List<Balance> { b1, b2, b3 });
+            _dataContext.AddRange(_balances);
             await _dataContext.SaveChangesAsync();
         }
 

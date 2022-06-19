@@ -25,13 +25,13 @@ namespace BillingAPI.Data
             _dataContext.Balances.Remove(balance);
         }
 
-        public async Task<IEnumerable<Balance>> GetAll(bool asc = false, bool desc = false)
+        public async Task<IEnumerable<Balance>> GetAll(string order = "")
         {
-            if (asc)
+            if (order == "asc")
             {
                 return await _dataContext.Balances.OrderBy(b => b.Id).ToListAsync();
             }
-            if (desc)
+            if (order == "desc")
             {
                 return await _dataContext.Balances.OrderByDescending(b => b.Id).ToListAsync();
             }
@@ -46,9 +46,15 @@ namespace BillingAPI.Data
             return balance;
         }
 
-        public void Update(Balance balance)
+        public async Task Update(Balance balance)
         {
+            if (!await CheckExists(balance.Id)) throw new NotFoundException("Balance not found");
             _dataContext.Update(balance);
+        }
+
+        private async Task<bool> CheckExists(int id)
+        {
+            return await _dataContext.Balances.AnyAsync(b => b.Id == id);
         }
     }
 }
