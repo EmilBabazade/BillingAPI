@@ -22,8 +22,9 @@ namespace BillingAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GatewayDTO>>> GetAll(string? order)
         {
-            IEnumerable<Gateway> gateways = await _uow.GatewayRepository.GetAll(order);
-            return Ok(_mapper.Map<IEnumerable<GatewayDTO>>(gateways));
+            //IEnumerable<Gateway> gateways = await _uow.GatewayRepository.GetAll(order);
+            //return Ok(_mapper.Map<IEnumerable<GatewayDTO>>(gateways));
+            return Ok(await _uow.GatewayRepository.GetAll(order));
         }
 
         [HttpGet("{id}")]

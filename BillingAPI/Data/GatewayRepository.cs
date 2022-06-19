@@ -1,4 +1,7 @@
-﻿using BillingAPI.Data.interfaces;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using BillingAPI.Data.interfaces;
+using BillingAPI.DTOs;
 using BillingAPI.Entities;
 using BillingAPI.Errors;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +11,12 @@ namespace BillingAPI.Data
     public class GatewayRepository : IGatewayRepository
     {
         private readonly DataContext _dataContext;
+        private readonly IMapper _mapper;
 
-        public GatewayRepository(DataContext dataContext)
+        public GatewayRepository(DataContext dataContext, IMapper mapper)
         {
             _dataContext = dataContext;
+            _mapper = mapper;
         }
         public void Add(Gateway gateway)
         {
@@ -25,17 +30,23 @@ namespace BillingAPI.Data
             _dataContext.Gateways.Remove(gateway);
         }
 
-        public async Task<IEnumerable<Gateway>> GetAll(string order = "")
+        public async Task<IEnumerable<GatewayDTO>> GetAll(string order = "")
         {
             if (order == "asc")
             {
-                return await _dataContext.Gateways.OrderBy(b => b.Id).ToListAsync();
+                return await _dataContext.Gateways.OrderBy(b => b.Id).ProjectTo<GatewayDTO>(
+                        _mapper.ConfigurationProvider
+                    ).ToListAsync();
             }
             if (order == "desc")
             {
-                return await _dataContext.Gateways.OrderByDescending(b => b.Id).ToListAsync();
+                return await _dataContext.Gateways.OrderByDescending(b => b.Id).ProjectTo<GatewayDTO>(
+                        _mapper.ConfigurationProvider
+                    ).ToListAsync();
             }
-            return await _dataContext.Gateways.ToListAsync();
+            return await _dataContext.Gateways.ProjectTo<GatewayDTO>(
+                        _mapper.ConfigurationProvider
+                    ).ToListAsync();
         }
 
         public async Task<Gateway> GetById(int id)
