@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
+using BillingAPI.DTOs;
+using BillingAPI.Entities;
 
 namespace BillingAPI.Helpers
 {
     public class AutoMapperProfiles : Profile
     {
-        //public AutoMapperProfiles()
-        //{
-        //    CreateMap<Test, Test2>()
-        //        .ForMember(
-        //            dest => dest.Salam,
-        //            opts => opts.MapFrom(src => src.Hello)
-        //            );
-        //}
+        public AutoMapperProfiles()
+        {
+            CreateMap<Balance, BalanceDTO>();
+            CreateMap<Gateway, GatewayDTO>();
+            CreateMap<Order, OrderDTO>();
+        }
     }
 }
