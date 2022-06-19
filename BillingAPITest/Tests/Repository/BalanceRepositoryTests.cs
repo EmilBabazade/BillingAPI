@@ -206,5 +206,44 @@ namespace BillingAPITest.Tests.Repository
             // Assert
             type.Should().Be("BillingAPI.Errors.NotFoundException");
         }
+
+        // get user balance should return correct user balance
+        [Test]
+        public async Task GetUserBalanceReturnsCorrectUserBalance()
+        {
+            // Arrange
+            int userId = _users[0].Id;
+            Balance? expectedBalance = _balances[0];
+
+            // Act
+            Balance? balance = await _balanceRepository.GetUserBalance(userId);
+
+            // Assert
+            balance.Should().Be(expectedBalance);
+        }
+
+        // get user balance should throw error for non existent user balance
+        [Test]
+        public async Task GetUserBalanceThrowsNotFoundExceptionForNonExistingUserId()
+        {
+            // Arrange
+            int userId = -99999;
+            string? type = "";
+
+            // Act
+            try
+            {
+                await _balanceRepository.GetUserBalance(userId);
+            }
+            catch (Exception ex)
+            {
+                type = ex.GetType()?.FullName;
+            }
+
+
+            // Assert
+            type.Should().Be("BillingAPI.Errors.NotFoundException");
+        }
+
     }
 }

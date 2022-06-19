@@ -17,7 +17,9 @@ namespace BillingAPITest.Tests.Repository
         [SetUp]
         public void SetupRepository()
         {
-            _orderRepository = new OrderRepository(_dataContext);
+            _orderRepository = new OrderRepository(
+                _dataContext, new GatewayRepository(_dataContext), new UserRepository(_dataContext)
+                );
         }
 
         //// add should add
