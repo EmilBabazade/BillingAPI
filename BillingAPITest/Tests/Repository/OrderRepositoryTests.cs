@@ -1,6 +1,8 @@
-﻿using BillingAPI.Data;
+﻿using AutoMapper;
+using BillingAPI.Data;
 using BillingAPI.DTOs;
 using BillingAPI.Entities;
+using BillingAPI.Helpers;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -18,8 +20,13 @@ namespace BillingAPITest.Tests.Repository
         [SetUp]
         public void SetupRepository()
         {
+            MapperConfiguration? mapFactory = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfiles());
+            });
+            IMapper? mapper = mapFactory.CreateMapper();
             _orderRepository = new OrderRepository(
-                _dataContext, new GatewayRepository(_dataContext), new UserRepository(_dataContext),
+                _dataContext, new GatewayRepository(_dataContext, mapper), new UserRepository(_dataContext),
                 new BalanceRepository(_dataContext), new PaymentRepository(_dataContext)
                 );
         }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BillingAPI.Data;
+using BillingAPI.DTOs;
 using BillingAPI.Entities;
 using BillingAPI.Helpers;
 using FluentAssertions;
@@ -98,7 +99,7 @@ namespace BillingAPITest.Tests.Repository
             int oldCount = _gateways.Count;
 
             // Act
-            IEnumerable<Gateway>? gatewaysInDb = await _gatewayRepository.GetAll();
+            IEnumerable<GatewayDTO>? gatewaysInDb = await _gatewayRepository.GetAll();
 
 
             // Assert
@@ -114,7 +115,7 @@ namespace BillingAPITest.Tests.Repository
             // Arrange
 
             // Act
-            IEnumerable<Gateway>? gatewaysInDb = await _gatewayRepository.GetAll(order);
+            IEnumerable<GatewayDTO>? gatewaysInDb = await _gatewayRepository.GetAll(order);
             List<int>? ids = gatewaysInDb.Select(b => b.Id).ToList();
 
 
