@@ -10,61 +10,59 @@ using System.Threading.Tasks;
 
 namespace BillingAPITest.Tests.Repository
 {
-    public class BalanceRepositoryTests : BaseRepositoryTests
+    public class GatewayRepositoryTests : BaseRepositoryTests
     {
-        private BalanceRepository _balanceRepository;
+        private GatewayRepository _gatewayRepository;
 
         [SetUp]
         public void SetupBalanceRepository()
         {
-            _balanceRepository = new BalanceRepository(_dataContext);
+            _gatewayRepository = new GatewayRepository(_dataContext);
         }
 
-        // add should add
+        //// add should add
         [Test]
-        public async Task AddingNewBalanceShouldAddNewBalanceToBalancesTable()
+        public async Task AddingNewGatewayShouldAddNewGatewayToGatewaysTable()
         {
             // Arrange
-            Balance? b = new Balance
+            Gateway? g = new Gateway
             {
-                Amount = 123,
-                UserId = _users[0].Id,
-                PaymentId = _payments[0].Id
+                No = "gt55"
             };
 
             // Act
-            _balanceRepository.Add(b);
+            _gatewayRepository.Add(g);
             await _dataContext.SaveChangesAsync();
-            Balance? newBalance = await _dataContext.Balances.FindAsync(b.Id);
-            List<Balance>? balancesInDb = await _dataContext.Balances.ToListAsync();
+            Gateway? newGateway = await _dataContext.Gateways.FindAsync(g.Id);
+            List<Gateway>? gatewaysInDb = await _dataContext.Gateways.ToListAsync();
 
             // Assert
-            newBalance.Should().NotBeNull();
-            balancesInDb.Count.Should().Be(_balances.Count + 1);
-            newBalance.Should().Be(b);
+            newGateway.Should().NotBeNull();
+            gatewaysInDb.Count.Should().Be(_gateways.Count + 1);
+            newGateway.Should().Be(g);
         }
 
-        // delete by id should delete
+        //// delete by id should delete
         [Test]
         public async Task DeleteByIdShouldLessenLengthBy1AndDelete()
         {
             // Arrange
-            int deleteId = _balances[0].Id;
+            int deleteId = _gateways[0].Id;
 
             // Act
-            _balanceRepository.DeleteById(deleteId);
+            _gatewayRepository.DeleteById(deleteId);
             await _dataContext.SaveChangesAsync();
-            Balance? deletedBalance = await _dataContext.Balances.FindAsync(deleteId);
-            List<Balance>? balancesInDb = await _dataContext.Balances.ToListAsync();
+            Gateway? deletedGateway = await _dataContext.Gateways.FindAsync(deleteId);
+            List<Gateway>? gatewaysInDB = await _dataContext.Gateways.ToListAsync();
 
             // Assert
-            deletedBalance.Should().BeNull();
-            balancesInDb.Count.Should().Be(_balances.Count - 1);
+            deletedGateway.Should().BeNull();
+            gatewaysInDB.Count.Should().Be(_gateways.Count - 1);
         }
 
         // delete by id should throw exception
         [Test]
-        public async Task DeleteByIdShouldThrowNotFoundExceptionForNonExistentBalance()
+        public void DeleteByIdShouldThrowNotFoundExceptionForNonExistentGateway()
         {
             // Arrange
             int deleteId = -99999;
@@ -73,13 +71,12 @@ namespace BillingAPITest.Tests.Repository
             // Act
             try
             {
-                _balanceRepository.DeleteById(deleteId);
+                _gatewayRepository.DeleteById(deleteId);
             }
             catch (Exception ex)
             {
                 type = ex.GetType()?.FullName;
             }
-
 
             // Assert
             type.Should().Be("BillingAPI.Errors.NotFoundException");
@@ -90,14 +87,14 @@ namespace BillingAPITest.Tests.Repository
         public async Task GetAllShouldReturnSameLengthAsInitialList()
         {
             // Arrange
-            int oldCount = _balances.Count;
+            int oldCount = _gateways.Count;
 
             // Act
-            IEnumerable<Balance>? balancesInDb = await _balanceRepository.GetAll();
+            IEnumerable<Gateway>? gatewaysInDb = await _gatewayRepository.GetAll();
 
 
             // Assert
-            balancesInDb.Select(b => b).ToList().Count.Should().Be(oldCount);
+            gatewaysInDb.Select(b => b).ToList().Count.Should().Be(oldCount);
         }
 
         // get all asc should return ascending
@@ -107,10 +104,10 @@ namespace BillingAPITest.Tests.Repository
         public async Task GetAllAscendingShouldReturnInAscendingOrderAndDescendingShouldReturnInDescendingOrder(string order)
         {
             // Arrange
-            IEnumerable<Balance>? balances = await _balanceRepository.GetAll(order);
 
             // Act
-            List<int>? ids = balances.Select(b => b.Id).ToList();
+            IEnumerable<Gateway>? gatewaysInDb = await _gatewayRepository.GetAll(order);
+            List<int>? ids = gatewaysInDb.Select(b => b.Id).ToList();
 
 
             // Assert
@@ -128,21 +125,21 @@ namespace BillingAPITest.Tests.Repository
 
         // get by id should return 1 
         [Test]
-        public async Task GetByIdShouldReturnCorrectBalance()
+        public async Task GetByIdShouldReturnCorrectGateway()
         {
             // Arrange
-            Balance? balance = _balances[1];
+            Gateway? gateway = _gateways[1];
 
             // Act
-            Balance? balanceInDb = await _balanceRepository.GetById(_balances[1].Id);
+            Gateway? gatewaysInDb = await _gatewayRepository.GetById(_gateways[1].Id);
 
             // Assert
-            balanceInDb.Should().Be(balance);
+            gatewaysInDb.Should().Be(gateway);
         }
 
         // get by id should throw exception
         [Test]
-        public async Task GetByIdShouldThrowNotFoundExceptionWhenBalanceNotExists()
+        public async Task GetByIdShouldThrowNotFoundExceptionWhenGatewayNotExists()
         {
             // Arrange
             string? type = "";
@@ -151,7 +148,7 @@ namespace BillingAPITest.Tests.Repository
             // Act
             try
             {
-                await _balanceRepository.GetById(id);
+                await _gatewayRepository.GetById(id);
             }
             catch (Exception ex)
             {
@@ -168,34 +165,34 @@ namespace BillingAPITest.Tests.Repository
         public async Task UpdateShouldUpdate()
         {
             // Arrange
-            Balance? balance = _balances[1];
-            balance.Amount = 0;
+            Gateway? gateway = _gateways[1];
+            gateway.No = "gta";
 
             // Act
-            await _balanceRepository.Update(balance);
-            Balance? updatedBalance = await _balanceRepository.GetById(balance.Id);
+            await _gatewayRepository.Update(gateway);
+            Gateway? updatedGateway = await _gatewayRepository.GetById(gateway.Id);
 
 
             // Assert
-            updatedBalance.Should().Be(balance);
+            updatedGateway.Should().Be(gateway);
         }
 
         // update should throw exception
         [Test]
-        public async Task UpdateShouldThrowExceptionIfBalanceNotExists()
+        public async Task UpdateShouldThrowExceptionIfGatewayNotExists()
         {
             // Arrange
             string? type = "";
-            Balance balance = new()
+            Gateway gateway = new()
             {
                 Id = -9999,
-                Amount = 324324
+                No = "gta"
             };
 
             // Act
             try
             {
-                await _balanceRepository.Update(balance);
+                await _gatewayRepository.Update(gateway);
             }
             catch (Exception ex)
             {
