@@ -1,7 +1,10 @@
-﻿namespace BillingAPI.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BillingAPI.Entities
 {
     public class Order
     {
+        [Key]
         public int Id { get; set; }
         public string No { get; set; }
         public decimal PayableAmount { get; set; }

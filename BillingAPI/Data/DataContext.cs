@@ -13,6 +13,22 @@ namespace BillingAPI.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Gateway>()
+                .HasIndex(g => g.No)
+                .IsUnique();
+
+            builder.Entity<Order>()
+                .HasIndex(o => o.No)
+                .IsUnique();
+
+            builder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+        }
+
+
         public virtual DbSet<Balance> Balances { get; set; }
         public virtual DbSet<Gateway> Gateways { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
