@@ -35,7 +35,7 @@ namespace BillingAPITest.Tests.Repository
             };
 
             // Act
-            await _orderRepository.Add(g);
+            _orderRepository.Add(g);
             await _dataContext.SaveChangesAsync();
             Order? newOrder = await _dataContext.Orders.FindAsync(g.Id);
             System.Collections.Generic.List<Order>? ordersInDb = await _dataContext.Orders.ToListAsync();

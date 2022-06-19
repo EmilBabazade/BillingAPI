@@ -33,10 +33,11 @@ namespace BillingAPITest.Tests.Repository
             };
 
             // Act
-            await _balanceRepository.Add(b);
+            _balanceRepository.Add(b); // this method works but the unit test fails for some goddamn reason
             await _dataContext.SaveChangesAsync();
             Balance? newBalance = await _dataContext.Balances.FindAsync(b.Id);
-            List<Balance>? balancesInDb = await _dataContext.Balances.ToListAsync();
+            List<Balance>? balancesInDb = await _dataContext.Balances.ToListAsync(); // this return the newly created balance in the
+            // list but doesn't return _balances[0]
 
             // Assert
             newBalance.Should().NotBeNull();

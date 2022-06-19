@@ -13,9 +13,9 @@ namespace BillingAPI.Data
         {
             _dataContext = dataContext;
         }
-        public async Task Add(Balance balance)
+        public void Add(Balance balance)
         {
-            await _dataContext.Balances.AddAsync(balance);
+            _dataContext.Balances.Add(balance);
         }
 
         public void DeleteById(int id)

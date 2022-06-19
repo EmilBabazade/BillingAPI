@@ -14,9 +14,9 @@ namespace BillingAPI.Data
             _dataContext = dataContext;
         }
 
-        public async Task Add(Payment payment)
+        public void Add(Payment payment)
         {
-            await _dataContext.Payments.AddAsync(payment);
+            _dataContext.Payments.Add(payment);
         }
 
         public void DeleteById(int id)

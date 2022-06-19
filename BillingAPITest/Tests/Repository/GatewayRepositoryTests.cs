@@ -31,7 +31,7 @@ namespace BillingAPITest.Tests.Repository
             };
 
             // Act
-            await _gatewayRepository.Add(g);
+            _gatewayRepository.Add(g);
             await _dataContext.SaveChangesAsync();
             Gateway? newGateway = await _dataContext.Gateways.FindAsync(g.Id);
             List<Gateway>? gatewaysInDb = await _dataContext.Gateways.ToListAsync();

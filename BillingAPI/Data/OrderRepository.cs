@@ -24,9 +24,9 @@ namespace BillingAPI.Data
             _balanceRepository = balanceRepository;
             _paymentRepository = paymentRepository;
         }
-        public async Task Add(Order order)
+        public void Add(Order order)
         {
-            await _dataContext.Orders.AddAsync(order);
+            _dataContext.Orders.Add(order);
         }
 
         public void DeleteById(int id)
@@ -82,7 +82,7 @@ namespace BillingAPI.Data
             Balance userBalance = await _balanceRepository.GetUserBalance(processOrderDTO.UserId);
             if (userBalance.Amount < processOrderDTO.PayableAmount)
             {
-                await _paymentRepository.Add(new Payment
+                _paymentRepository.Add(new Payment
                 {
                     Amount = processOrderDTO.PayableAmount,
                     Description = processOrderDTO.Description,
@@ -101,7 +101,7 @@ namespace BillingAPI.Data
                 UserId = processOrderDTO.UserId,
                 IsSuccessfull = true
             };
-            await _paymentRepository.Add(payment);
+            _paymentRepository.Add(payment);
             Order order = new Order
             {
                 Description = processOrderDTO.Description,
@@ -111,7 +111,7 @@ namespace BillingAPI.Data
                 PaymentId = payment.Id,
                 UserId = processOrderDTO.UserId
             };
-            await Add(order);
+            Add(order);
             // subtract from user balance
             Balance? balance = new Balance
             {
@@ -119,7 +119,7 @@ namespace BillingAPI.Data
                 PaymentId = payment.Id,
                 UserId = user.Id
             };
-            await _balanceRepository.Add(balance);
+            _balanceRepository.Add(balance);
             // return the receipt
             return new ReceiptDTO
             {

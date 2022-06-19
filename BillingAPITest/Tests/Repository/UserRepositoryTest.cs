@@ -33,7 +33,7 @@ namespace BillingAPITest.Tests.Repository
             };
 
             // Act
-            await _userRepository.Add(u);
+            _userRepository.Add(u);
             await _dataContext.SaveChangesAsync();
             User? newUser = await _dataContext.Users.FindAsync(u.Id);
             List<User>? usersInDB = await _dataContext.Users.ToListAsync();

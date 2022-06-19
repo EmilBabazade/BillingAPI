@@ -14,9 +14,9 @@ namespace BillingAPI.Data
             _dataContext = dataContext;
         }
 
-        public async Task Add(User user)
+        public void Add(User user)
         {
-            await _dataContext.Users.AddAsync(user);
+            _dataContext.Users.Add(user);
         }
 
         public void DeleteById(int id)

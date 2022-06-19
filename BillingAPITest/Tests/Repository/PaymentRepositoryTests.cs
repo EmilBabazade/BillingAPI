@@ -33,7 +33,7 @@ namespace BillingAPITest.Tests.Repository
             };
 
             // Act
-            await _paymentRepository.Add(p);
+            _paymentRepository.Add(p);
             await _dataContext.SaveChangesAsync();
             Payment? newPayment = await _dataContext.Payments.FindAsync(p.Id);
             System.Collections.Generic.List<Payment>? paymentsInDB = await _dataContext.Payments.ToListAsync();
