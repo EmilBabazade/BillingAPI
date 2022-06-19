@@ -10,36 +10,38 @@ using System.Threading.Tasks;
 
 namespace BillingAPITest.Tests.Repository
 {
-    public class OrderRepositoryTests : BaseRepositoryTests
+    public class PaymentRepositoryTests : BaseRepositoryTests
     {
-        private OrderRepository _orderRepository;
+        private PaymentRepository _paymentRepository;
 
         [SetUp]
         public void SetupRepository()
         {
-            _orderRepository = new OrderRepository(_dataContext);
+            _paymentRepository = new PaymentRepository(_dataContext);
         }
 
         //// add should add
         [Test]
-        public async Task AddingNewOrderShouldAddNewOrderToOrdersTable()
+        public async Task AddingNewPaymentShouldAddNewPaymentToPaymentsTable()
         {
             // Arrange
-            Order? g = new Order
+            Payment? p = new Payment
             {
-                No = "od1"
+                Amount = 133,
+                Description = "sdfds",
+                IsSuccessfull = true
             };
 
             // Act
-            await _orderRepository.Add(g);
+            await _paymentRepository.Add(p);
             await _dataContext.SaveChangesAsync();
-            Order? newOrder = await _dataContext.Orders.FindAsync(g.Id);
-            System.Collections.Generic.List<Order>? ordersInDb = await _dataContext.Orders.ToListAsync();
+            Payment? newPayment = await _dataContext.Payments.FindAsync(p.Id);
+            System.Collections.Generic.List<Payment>? paymentsInDB = await _dataContext.Payments.ToListAsync();
 
             // Assert
-            newOrder.Should().NotBeNull();
-            ordersInDb.Count.Should().Be(_orders.Count + 1);
-            newOrder.Should().Be(g);
+            newPayment.Should().NotBeNull();
+            paymentsInDB.Count.Should().Be(_payments.Count + 1);
+            newPayment.Should().Be(p);
         }
 
         //// delete by id should delete
@@ -47,22 +49,22 @@ namespace BillingAPITest.Tests.Repository
         public async Task DeleteByIdShouldLessenLengthBy1AndDelete()
         {
             // Arrange
-            int deleteId = _orders[0].Id;
+            int deleteId = _payments[0].Id;
 
             // Act
-            _orderRepository.DeleteById(deleteId);
+            _paymentRepository.DeleteById(deleteId);
             await _dataContext.SaveChangesAsync();
-            Order? deletedOrder = await _dataContext.Orders.FindAsync(deleteId);
-            List<Order>? ordersInDB = await _dataContext.Orders.ToListAsync();
+            Payment? deletedPayment = await _dataContext.Payments.FindAsync(deleteId);
+            System.Collections.Generic.List<Payment>? paymentsInDB = await _dataContext.Payments.ToListAsync();
 
             // Assert
-            deletedOrder.Should().BeNull();
-            ordersInDB.Count.Should().Be(_orders.Count - 1);
+            deletedPayment.Should().BeNull();
+            paymentsInDB.Count.Should().Be(_payments.Count - 1);
         }
 
         // delete by id should throw exception
         [Test]
-        public void DeleteByIdShouldThrowNotFoundExceptionForNonExistentOrder()
+        public void DeleteByIdShouldThrowNotFoundExceptionForNonExistentPayment()
         {
             // Arrange
             int deleteId = -99999;
@@ -71,7 +73,7 @@ namespace BillingAPITest.Tests.Repository
             // Act
             try
             {
-                _orderRepository.DeleteById(deleteId);
+                _paymentRepository.DeleteById(deleteId);
             }
             catch (Exception ex)
             {
@@ -87,13 +89,13 @@ namespace BillingAPITest.Tests.Repository
         public async Task GetAllShouldReturnSameLengthAsInitialList()
         {
             // Arrange
-            int oldCount = _orders.Count;
+            int oldCount = _payments.Count;
 
             // Act
-            IEnumerable<Order>? ordersInDB = await _orderRepository.GetAll();
+            IEnumerable<Payment>? paymentsInDB = await _paymentRepository.GetAll();
 
             // Assert
-            ordersInDB.Select(b => b).ToList().Count.Should().Be(oldCount);
+            paymentsInDB.Select(b => b).ToList().Count.Should().Be(oldCount);
         }
 
         // get all asc should return ascending
@@ -105,8 +107,8 @@ namespace BillingAPITest.Tests.Repository
             // Arrange
 
             // Act
-            IEnumerable<Order>? ordersInDB = await _orderRepository.GetAll(order);
-            List<int>? ids = ordersInDB.Select(b => b.Id).ToList();
+            IEnumerable<Payment>? paymentsInDB = await _paymentRepository.GetAll(order);
+            List<int>? ids = paymentsInDB.Select(b => b.Id).ToList();
 
 
             // Assert
@@ -124,21 +126,21 @@ namespace BillingAPITest.Tests.Repository
 
         // get by id should return 1 
         [Test]
-        public async Task GetByIdShouldReturnCorrectOrder()
+        public async Task GetByIdShouldReturnCorrectPayment()
         {
             // Arrange
-            Order? order = _orders[1];
+            Payment? payment = _payments[1];
 
             // Act
-            Order? ordersInDB = await _orderRepository.GetById(_orders[1].Id);
+            Payment? paymentsInDB = await _paymentRepository.GetById(_payments[1].Id);
 
             // Assert
-            ordersInDB.Should().Be(order);
+            paymentsInDB.Should().Be(payment);
         }
 
         // get by id should throw exception
         [Test]
-        public async Task GetByIdShouldThrowNotFoundExceptionWhenOrderNotExists()
+        public async Task GetByIdShouldThrowNotFoundExceptionWhenPaymentNotExists()
         {
             // Arrange
             string? type = "";
@@ -147,7 +149,7 @@ namespace BillingAPITest.Tests.Repository
             // Act
             try
             {
-                await _orderRepository.GetById(id);
+                await _paymentRepository.GetById(id);
             }
             catch (Exception ex)
             {
@@ -163,40 +165,38 @@ namespace BillingAPITest.Tests.Repository
         public async Task UpdateShouldUpdate()
         {
             // Arrange
-            Order? order = _orders[1];
-            order.No = "gta";
+            Payment? payment = _payments[1];
+            payment.Amount = 999999;
 
             // Act
-            await _orderRepository.Update(order);
-            Order? updatedOrder = await _orderRepository.GetById(order.Id);
+            await _paymentRepository.Update(payment);
+            Payment? updatedPayment = await _paymentRepository.GetById(payment.Id);
 
 
             // Assert
-            updatedOrder.Should().Be(order);
+            updatedPayment.Should().Be(payment);
         }
 
         // update should throw exception
         [Test]
-        public async Task UpdateShouldThrowExceptionIfOrderNotExists()
+        public async Task UpdateShouldThrowExceptionIfPaymentNotExists()
         {
             // Arrange
             string? type = "";
-            Order order = new()
+            Payment payment = new()
             {
-                Id = -9999,
-                No = "gta"
+                Amount = 99999
             };
 
             // Act
             try
             {
-                await _orderRepository.Update(order);
+                await _paymentRepository.Update(payment);
             }
             catch (Exception ex)
             {
                 type = ex.GetType()?.FullName;
             }
-
 
             // Assert
             type.Should().Be("BillingAPI.Errors.NotFoundException");

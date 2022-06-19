@@ -15,7 +15,7 @@ namespace BillingAPITest.Tests.Repository
         private GatewayRepository _gatewayRepository;
 
         [SetUp]
-        public void SetupBalanceRepository()
+        public void SetupRepository()
         {
             _gatewayRepository = new GatewayRepository(_dataContext);
         }

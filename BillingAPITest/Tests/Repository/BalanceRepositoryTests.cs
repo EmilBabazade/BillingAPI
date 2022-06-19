@@ -15,7 +15,7 @@ namespace BillingAPITest.Tests.Repository
         private BalanceRepository _balanceRepository;
 
         [SetUp]
-        public void SetupBalanceRepository()
+        public void SetupRepository()
         {
             _balanceRepository = new BalanceRepository(_dataContext);
         }

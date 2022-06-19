@@ -118,7 +118,7 @@ namespace BillingAPITest.Tests.Repository
                 }
             };
 
-            _dataContext.AddRange(_users);
+            _dataContext.AddRange(_payments);
             // add balance
             _balances = new()
             {
@@ -165,6 +165,7 @@ namespace BillingAPITest.Tests.Repository
                 },
             };
             await _dataContext.AddRangeAsync(orderPayments);
+            _payments.AddRange(orderPayments);
             _orders = new List<Order>()
             {
                 new Order
