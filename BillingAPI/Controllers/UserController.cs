@@ -20,7 +20,7 @@ namespace BillingAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll(string order)
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll(string? order)
         {
             IEnumerable<User> users = await _uow.UserRepository.GetAll(order);
             return Ok(_mapper.Map<IEnumerable<UserDTO>>(users));

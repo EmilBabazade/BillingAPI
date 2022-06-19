@@ -102,6 +102,7 @@ namespace BillingAPI.Data
                 IsSuccessfull = true
             };
             _paymentRepository.Add(payment);
+            await _dataContext.SaveChangesAsync();
             Order order = new Order
             {
                 Description = processOrderDTO.Description,

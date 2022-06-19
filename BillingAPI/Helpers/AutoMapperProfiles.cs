@@ -11,6 +11,8 @@ namespace BillingAPI.Helpers
             CreateMap<Balance, BalanceDTO>();
             CreateMap<Gateway, GatewayDTO>();
             CreateMap<Order, OrderDTO>();
+            CreateMap<User, UserDTO>();
+            CreateMap<Payment, PaymentDTO>();
         }
     }
 }

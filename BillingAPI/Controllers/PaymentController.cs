@@ -20,9 +20,9 @@ namespace BillingAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PaymentDTO>> GetAll()
+        public async Task<ActionResult<PaymentDTO>> GetAll(string? order)
         {
-            IEnumerable<Payment> payments = await _uow.PaymentRepository.GetAll();
+            IEnumerable<Payment> payments = await _uow.PaymentRepository.GetAll(order);
             return Ok(_mapper.Map<IEnumerable<PaymentDTO>>(payments));
         }
 
