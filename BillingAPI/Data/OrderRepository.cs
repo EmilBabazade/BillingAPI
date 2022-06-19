@@ -13,9 +13,9 @@ namespace BillingAPI.Data
         {
             _dataContext = dataContext;
         }
-        public void Add(Order order)
+        public async Task Add(Order order)
         {
-            _dataContext.Orders.Add(order);
+            await _dataContext.Orders.AddAsync(order);
         }
 
         public void DeleteById(int id)

@@ -13,9 +13,9 @@ namespace BillingAPI.Data
         {
             _dataContext = dataContext;
         }
-        public void Add(Gateway gateway)
+        public async Task Add(Gateway gateway)
         {
-            _dataContext.Gateways.Add(gateway);
+            await _dataContext.Gateways.AddAsync(gateway);
         }
 
         public void DeleteById(int id)

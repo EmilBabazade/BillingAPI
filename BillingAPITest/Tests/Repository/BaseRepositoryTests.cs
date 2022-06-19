@@ -44,6 +44,7 @@ namespace BillingAPITest.Tests.Repository
         protected List<Balance> _balances = new();
         protected List<User> _users = new();
         protected List<Payment> _payments = new();
+        protected List<Order> _orders = new();
 
         [SetUp]
         public async Task SeedData()
@@ -141,6 +142,52 @@ namespace BillingAPITest.Tests.Repository
                 },
             };
             _dataContext.AddRange(_balances);
+            // add payments
+            List<Payment>? orderPayments = new List<Payment>
+            {
+                new Payment
+                {
+                    Amount = -20,
+                    IsSuccessfull = true,
+                    UserId = _users[0].Id
+                },
+                new Payment
+                {
+                    Amount = -30,
+                    IsSuccessfull = true,
+                    UserId = _users[1].Id
+                },
+                new Payment
+                {
+                    Amount = -15,
+                    IsSuccessfull = true,
+                    UserId = _users[0].Id
+                },
+            };
+            await _dataContext.AddRangeAsync(orderPayments);
+            _orders = new List<Order>()
+            {
+                new Order
+                {
+                    No = "234",
+                    PayableAmount = -20,
+                    UserId = _users[0].Id
+                },
+                new Order
+                {
+                    No = "235",
+                    PayableAmount = -30,
+                    UserId = _users[1].Id
+                },
+                new Order
+                {
+                    No = "236",
+                    PayableAmount = -15,
+                    UserId = _users[2].Id
+                },
+            };
+            await _dataContext.AddRangeAsync(_orders);
+            // add orders
             await _dataContext.SaveChangesAsync();
         }
 
