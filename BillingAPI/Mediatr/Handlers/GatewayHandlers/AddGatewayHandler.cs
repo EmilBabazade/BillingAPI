@@ -6,7 +6,7 @@ using BillingAPI.Errors;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace BillingAPI.Mediatr.Handlers
+namespace BillingAPI.Mediatr.Handlers.GatewayHandlers
 {
     public class AddGatewayHandler : IRequestHandler<AddGatewayCommand, GatewayDTO>
     {

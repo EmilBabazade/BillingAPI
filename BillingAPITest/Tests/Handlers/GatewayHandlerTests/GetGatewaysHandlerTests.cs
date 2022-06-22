@@ -1,6 +1,6 @@
 ﻿using BillingAPI.DTOs;
 using BillingAPI.Mediatr;
-using BillingAPI.Mediatr.Handlers;
+using BillingAPI.Mediatr.Handlers.GatewayHandlers;
 using FluentAssertions;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BillingAPITest.Tests.Handlers.Gateway
+namespace BillingAPITest.Tests.Handlers.GatewayHandlerTests
 {
     public class GetGatewaysHandlerTests : BaseHandlerTests
     {

@@ -5,7 +5,7 @@ using BillingAPI.DTOs;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace BillingAPI.Mediatr.Handlers
+namespace BillingAPI.Mediatr.Handlers.GatewayHandlers
 {
     public class GetGatewaysHandler : IRequestHandler<GetGatewaysQuery, IEnumerable<GatewayDTO>>
     {
