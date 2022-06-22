@@ -45,5 +45,11 @@ namespace BillingAPI.Controllers
             await _mediator.Send(new DeleteGatewayCommand(id));
             return NoContent();
         }
+
+        [HttpPut]
+        public async Task<GatewayDTO> UpdateGateway(UpdateGatewayDTO updateGatewayDTO)
+        {
+            return await _mediator.Send(new UpdateGatewayCommand(updateGatewayDTO));
+        }
     }
 }
