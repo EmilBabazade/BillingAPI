@@ -34,9 +34,16 @@ namespace BillingAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<GatewayDTO> AddGateway(AddGatewayDTO addGatewayDTO)
+        public async Task<ActionResult<GatewayDTO>> AddGateway(AddGatewayDTO addGatewayDTO)
         {
             return await _mediator.Send(new AddGatewayCommand(addGatewayDTO));
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteGateway(int id)
+        {
+            await _mediator.Send(new DeleteGatewayCommand(id));
+            return NoContent();
         }
     }
 }
