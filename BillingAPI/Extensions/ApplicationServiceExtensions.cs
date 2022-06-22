@@ -1,6 +1,7 @@
 ﻿using BillingAPI.Data;
 using BillingAPI.Data.interfaces;
 using BillingAPI.Helpers;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace BillingAPI.Extensions
@@ -10,6 +11,7 @@ namespace BillingAPI.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+            services.AddMediatR(typeof(Program));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddDbContext<DataContext>(options =>
             {

@@ -1,7 +1,6 @@
-﻿using AutoMapper;
-using BillingAPI.Data.interfaces;
-using BillingAPI.DTOs;
-using BillingAPI.Entities;
+﻿using BillingAPI.DTOs;
+using BillingAPI.Mediatr;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillingAPI.Controllers
@@ -10,13 +9,11 @@ namespace BillingAPI.Controllers
     [ApiController]
     public class GatewayController : ControllerBase
     {
-        private readonly IUnitOfWork _uow;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public GatewayController(IUnitOfWork uow, IMapper mapper)
+        public GatewayController(IMediator mediator)
         {
-            _uow = uow;
-            _mapper = mapper;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -27,16 +24,19 @@ namespace BillingAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GatewayDTO>>> GetAll(string? order)
         {
-            //IEnumerable<Gateway> gateways = await _uow.GatewayRepository.GetAll(order);
-            //return Ok(_mapper.Map<IEnumerable<GatewayDTO>>(gateways));
-            return Ok(await _uow.GatewayRepository.GetAll(order));
+            return Ok(await _mediator.Send(new GetGatewaysQuery(order)));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<GatewayDTO>> GetOne(int id)
         {
-            Gateway gateway = await _uow.GatewayRepository.GetById(id);
-            return Ok(_mapper.Map<GatewayDTO>(gateway));
+            return await _mediator.Send(new GetGatewayByIdQuery(id));
+        }
+
+        [HttpPost]
+        public async Task<GatewayDTO> AddGateway(AddGatewayDTO addGatewayDTO)
+        {
+            return await _mediator.Send(new AddGatewayCommand(addGatewayDTO));
         }
     }
 }
