@@ -35,8 +35,18 @@ namespace BillingAPI.Controllers
         }
 
         // create user
+        [HttpPost]
+        public async Task<ActionResult<UserDTO>> AddUser(AddUserDTO addUserDTO)
+        {
+            return Ok(await _mediatr.Send(new AddUserCommand(addUserDTO)));
+        }
 
         // update user
+        [HttpPut]
+        public async Task<ActionResult<UserDTO>> EditUser(UpdateUserDTO updateUserDTO)
+        {
+            return Ok(await _mediatr.Send(new UpdateUserCommand(updateUserDTO)));
+        }
 
         // delete user
     }
