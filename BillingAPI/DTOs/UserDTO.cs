@@ -7,5 +7,8 @@
         public string Surname { get; set; }
         public string Email { get; set; }
         public DateTime CreatedAt { get; set; }
+        public BalanceDTO Balance { get; set; }
+        public IEnumerable<PaymentDTO> Payments { get; set; }
+        public IEnumerable<OrderDTO> Orders { get; set; }
     }
 }
