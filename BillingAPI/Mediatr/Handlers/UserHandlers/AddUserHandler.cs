@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BillingAPI.Data;
-using BillingAPI.DTOs;
+using BillingAPI.DTOs.User;
 using BillingAPI.Entities;
 using BillingAPI.Errors;
 using MediatR;

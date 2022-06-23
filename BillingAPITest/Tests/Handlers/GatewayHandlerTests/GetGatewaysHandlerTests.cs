@@ -1,4 +1,4 @@
-﻿using BillingAPI.DTOs;
+﻿using BillingAPI.DTOs.Gateway;
 using BillingAPI.Mediatr;
 using BillingAPI.Mediatr.Handlers.GatewayHandlers;
 using FluentAssertions;

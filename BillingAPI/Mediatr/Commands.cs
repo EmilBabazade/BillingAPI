@@ -1,4 +1,5 @@
-﻿using BillingAPI.DTOs;
+﻿using BillingAPI.DTOs.Gateway;
+using BillingAPI.DTOs.User;
 using MediatR;
 
 namespace BillingAPI.Mediatr

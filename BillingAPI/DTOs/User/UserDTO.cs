@@ -1,4 +1,8 @@
-﻿namespace BillingAPI.DTOs
+﻿using BillingAPI.DTOs.Balance;
+using BillingAPI.DTOs.Order;
+using BillingAPI.DTOs.Payment;
+
+namespace BillingAPI.DTOs.User
 {
     public class UserDTO
     {

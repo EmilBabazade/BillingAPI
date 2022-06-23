@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using BillingAPI.Data;
-using BillingAPI.DTOs;
+using BillingAPI.DTOs.Gateway;
 using BillingAPI.Errors;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,4 @@
-﻿namespace BillingAPI.DTOs
+﻿namespace BillingAPI.DTOs.Gateway
 {
     public class UpdateGatewayDTO
     {

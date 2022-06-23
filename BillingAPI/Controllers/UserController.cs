@@ -1,4 +1,4 @@
-﻿using BillingAPI.DTOs;
+﻿using BillingAPI.DTOs.User;
 using BillingAPI.Mediatr;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

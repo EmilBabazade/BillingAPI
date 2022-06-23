@@ -1,4 +1,4 @@
-﻿using BillingAPI.DTOs;
+﻿using BillingAPI.DTOs.User;
 using BillingAPI.Mediatr;
 using BillingAPI.Mediatr.Handlers.UserHandlers;
 using FluentAssertions;

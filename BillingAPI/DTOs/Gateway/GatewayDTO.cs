@@ -1,4 +1,7 @@
-﻿namespace BillingAPI.DTOs
+﻿using BillingAPI.DTOs.Order;
+using BillingAPI.DTOs.Payment;
+
+namespace BillingAPI.DTOs.Gateway
 {
     public class GatewayDTO
     {

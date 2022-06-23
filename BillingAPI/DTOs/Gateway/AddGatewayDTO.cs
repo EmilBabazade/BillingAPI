@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BillingAPI.DTOs
+namespace BillingAPI.DTOs.Gateway
 {
     public class AddGatewayDTO
     {

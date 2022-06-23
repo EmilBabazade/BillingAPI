@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
-using BillingAPI.DTOs;
+using BillingAPI.DTOs.Balance;
+using BillingAPI.DTOs.Gateway;
+using BillingAPI.DTOs.Order;
+using BillingAPI.DTOs.Payment;
+using BillingAPI.DTOs.User;
 using BillingAPI.Entities;
 
 namespace BillingAPI.Helpers
