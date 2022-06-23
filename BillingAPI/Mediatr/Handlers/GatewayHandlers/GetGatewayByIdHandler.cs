@@ -23,7 +23,7 @@ namespace BillingAPI.Mediatr.Handlers.GatewayHandlers
         {
             GatewayDTO? gateway = await _dataContext.Gateways.ProjectTo<GatewayDTO>(
                         _mapper.ConfigurationProvider
-                    ).SingleOrDefaultAsync(g => g.Id == request.id);
+                    ).SingleOrDefaultAsync(g => g.Id == request.Id);
             if (gateway == null) throw new NotFoundException("Gateway not found");
             return gateway;
         }

@@ -19,13 +19,13 @@ namespace BillingAPI.Mediatr.Handlers.GatewayHandlers
         }
         public async Task<IEnumerable<GatewayDTO>> Handle(GetGatewaysQuery request, CancellationToken cancellationToken)
         {
-            if (request.order == "asc")
+            if (request.Order == "asc")
             {
                 return await _dataContext.Gateways.OrderBy(b => b.Id).ProjectTo<GatewayDTO>(
                         _mapper.ConfigurationProvider
                     ).ToListAsync();
             }
-            if (request.order == "desc")
+            if (request.Order == "desc")
             {
                 return await _dataContext.Gateways.OrderByDescending(b => b.Id).ProjectTo<GatewayDTO>(
                         _mapper.ConfigurationProvider

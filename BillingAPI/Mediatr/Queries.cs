@@ -3,7 +3,8 @@ using MediatR;
 
 namespace BillingAPI.Mediatr
 {
-    public record GetGatewaysQuery(string order = "") : IRequest<IEnumerable<GatewayDTO>>;
-    public record GetGatewayByIdQuery(int id) : IRequest<GatewayDTO>;
-    public record GetUsersQuery(string order = "") : IRequest<IEnumerable<UserDTO>>;
+    public record GetGatewaysQuery(string Order = "") : IRequest<IEnumerable<GatewayDTO>>;
+    public record GetGatewayByIdQuery(int Id) : IRequest<GatewayDTO>;
+    public record GetUsersQuery(string Order = "") : IRequest<IEnumerable<UserDTO>>;
+    public record GetUserByİdQuery(int Id) : IRequest<UserDTO>;
 }
