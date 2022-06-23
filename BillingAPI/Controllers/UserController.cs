@@ -49,5 +49,11 @@ namespace BillingAPI.Controllers
         }
 
         // delete user
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            await _mediatr.Send(new DeleteUserCommand(id));
+            return NoContent();
+        }
     }
 }

@@ -86,7 +86,7 @@ namespace BillingAPITest.Tests.Handlers.UsersHandlerTests
 
             // Act
             await _handler.Handle(new UpdateUserCommand(user), new CancellationToken());
-            user.Id = 2;
+            user.Id = _users[0].Id;
             try
             {
                 await _handler.Handle(new UpdateUserCommand(user), new CancellationToken());

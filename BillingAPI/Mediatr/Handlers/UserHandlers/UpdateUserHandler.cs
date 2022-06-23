@@ -30,15 +30,12 @@ namespace BillingAPI.Mediatr.Handlers.UserHandlers
             // check if email is unique
             if (await _dataContext.Users.AnyAsync(u => u.Id != request.UpdateUserDTO.Id && u.Email == request.UpdateUserDTO.Email))
                 throw new BadRequestException("Another user already exists with given email");
-            User newUser = new()
-            {
-                Email = request.UpdateUserDTO.Email,
-                Name = request.UpdateUserDTO.Name,
-                Surname = request.UpdateUserDTO.Surname
-            };
-            _dataContext.Users.Add(newUser);
+            user.Email = request.UpdateUserDTO.Email;
+            user.Name = request.UpdateUserDTO.Name;
+            user.Surname = request.UpdateUserDTO.Surname;
+            _dataContext.Users.Update(user);
             await _dataContext.SaveChangesAsync();
-            return _mapper.Map<UserDTO>(newUser);
+            return _mapper.Map<UserDTO>(user);
         }
     }
 }
