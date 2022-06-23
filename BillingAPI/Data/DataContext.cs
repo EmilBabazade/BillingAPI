@@ -28,7 +28,6 @@ namespace BillingAPI.Data
                 .IsUnique();
         }
 
-
         public virtual DbSet<Balance> Balances { get; set; }
         public virtual DbSet<Gateway> Gateways { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
