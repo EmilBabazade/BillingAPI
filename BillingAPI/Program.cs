@@ -14,7 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "BillingApi", Version = "v1" });
-    var path = Path.Combine(AppContext.BaseDirectory, "BillingApi.xml");
+    string? path = Path.Combine(AppContext.BaseDirectory, "BillingApi.xml");
     options.IncludeXmlComments(path);
 });
 builder.Services.AddApplicationServices(builder.Configuration);
@@ -29,6 +29,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<LogRequestMiddleware>();
 
 app.UseHttpsRedirection();
 
