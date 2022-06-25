@@ -29,5 +29,17 @@ namespace BillingAPI.Controllers
         {
             return Ok(await _mediator.Send(new GetOrdersQuery(order, userId, gatewayId)));
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<OrderDTO>> GetOrder(int id)
+        {
+            return Ok(await _mediator.Send(new GetOrderQuery(id)));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ReceiptDTO>> AddOrder(ProcessOrderDTO processOrderDTO)
+        {
+            return Ok(await _mediator.Send(new AddOrderCommand(processOrderDTO)));
+        }
     }
 }

@@ -16,4 +16,5 @@ namespace BillingAPI.Mediatr
     public record GetPaymentsQuery(bool? successfull = null, int? userId = null, string? order = "") : IRequest<IEnumerable<PaymentDTO>>;
     public record GetPaymentQuery(int Id) : IRequest<PaymentDTO>;
     public record GetOrdersQuery(string order = "", int? userId = null, int? gatewayId = null) : IRequest<IEnumerable<OrderDTO>>;
+    public record GetOrderQuery(int orderId) : IRequest<OrderDTO>;
 }
