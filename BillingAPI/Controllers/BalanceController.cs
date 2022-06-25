@@ -27,5 +27,11 @@ namespace BillingAPI.Controllers
         {
             return Ok(await _mediator.Send(new GetBalancesQuery(userId, order)));
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BalanceDTO>> GetBalance(int id)
+        {
+            return Ok(await _mediator.Send(new GetBalanceQuery(id)));
+        }
     }
 }
