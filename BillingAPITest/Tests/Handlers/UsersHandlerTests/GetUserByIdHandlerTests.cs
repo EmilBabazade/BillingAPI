@@ -28,7 +28,7 @@ namespace BillingAPITest.Tests.Handlers.UsersHandlerTests
             User? user = _users[1];
 
             // Act
-            UserDTO userInDB = await _handler.Handle(new GetUserByİdQuery(user.Id), new CancellationToken());
+            UserDTO userInDB = await _handler.Handle(new GetUserByIdQuery(user.Id), new CancellationToken());
 
             // Assert
             userInDB.Should().BeEquivalentTo(_mapper.Map<UserDTO>(user));
@@ -45,7 +45,7 @@ namespace BillingAPITest.Tests.Handlers.UsersHandlerTests
             // Act
             try
             {
-                await _handler.Handle(new GetUserByİdQuery(id), new CancellationToken());
+                await _handler.Handle(new GetUserByIdQuery(id), new CancellationToken());
             }
             catch (Exception ex)
             {

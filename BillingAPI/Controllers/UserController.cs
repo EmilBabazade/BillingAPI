@@ -31,7 +31,7 @@ namespace BillingAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> GetById(int id)
         {
-            return Ok(await _mediatr.Send(new GetUserByİdQuery(id)));
+            return Ok(await _mediatr.Send(new GetUserByIdQuery(id)));
         }
 
         // create user

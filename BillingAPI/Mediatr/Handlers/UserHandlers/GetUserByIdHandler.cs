@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BillingAPI.Mediatr.Handlers.UserHandlers
 {
-    public class GetUserByIdHandler : IRequestHandler<GetUserByİdQuery, UserDTO>
+    public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, UserDTO>
     {
         private readonly DataContext _dataContext;
         private readonly IMapper _mapper;
@@ -18,7 +18,7 @@ namespace BillingAPI.Mediatr.Handlers.UserHandlers
             _dataContext = dataContext;
             _mapper = mapper;
         }
-        public async Task<UserDTO> Handle(GetUserByİdQuery request, CancellationToken cancellationToken)
+        public async Task<UserDTO> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             User? user = await _dataContext.Users
                 .Include(u => u.Balances)
