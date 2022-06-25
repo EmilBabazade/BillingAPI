@@ -33,5 +33,11 @@ namespace BillingAPI.Controllers
         {
             return Ok(await _mediator.Send(new GetBalanceQuery(id)));
         }
+
+        [HttpPost]
+        public async Task<ActionResult<BalanceDTO>> AddBalance(AddBalanceDTO addBalanceDTO)
+        {
+            return Ok(await _mediator.Send(new AddBalanceCommand(addBalanceDTO)));
+        }
     }
 }

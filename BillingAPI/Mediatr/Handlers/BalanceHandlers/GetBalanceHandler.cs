@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using BillingAPI.Data;
 using BillingAPI.DTOs.Balance;
-using BillingAPI.Entities;
 using BillingAPI.Errors;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BillingAPI.Mediatr.Handlers.BalanceHandlers
 {
@@ -19,10 +20,12 @@ namespace BillingAPI.Mediatr.Handlers.BalanceHandlers
         }
         public async Task<BalanceDTO> Handle(GetBalanceQuery request, CancellationToken cancellationToken)
         {
-            Balance? balance = await _dataContext.Balances.FindAsync(request.id);
+            BalanceDTO? balance = await _dataContext.Balances.ProjectTo<BalanceDTO>(
+                        _mapper.ConfigurationProvider
+                    ).SingleOrDefaultAsync(b => b.Id == request.id);
             if (balance == null)
                 throw new NotFoundException("Balance not found");
-            return _mapper.Map<BalanceDTO>(balance);
+            return balance;
         }
     }
 }

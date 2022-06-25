@@ -1,4 +1,5 @@
-﻿using BillingAPI.DTOs.Gateway;
+﻿using BillingAPI.DTOs.Balance;
+using BillingAPI.DTOs.Gateway;
 using BillingAPI.DTOs.User;
 using MediatR;
 
@@ -10,4 +11,5 @@ namespace BillingAPI.Mediatr
     public record AddUserCommand(AddUserDTO AddUserDTO) : IRequest<UserDTO>;
     public record UpdateUserCommand(UpdateUserDTO UpdateUserDTO) : IRequest<UserDTO>;
     public record DeleteUserCommand(int Id) : IRequest<Unit>;
+    public record AddBalanceCommand(AddBalanceDTO AddBalanceDTO) : IRequest<BalanceDTO>;
 }
