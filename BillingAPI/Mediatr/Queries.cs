@@ -13,4 +13,5 @@ namespace BillingAPI.Mediatr
     public record GetBalancesQuery(int? userId = null, string order = "") : IRequest<IEnumerable<BalanceDTO>>;
     public record GetBalanceQuery(int id) : IRequest<BalanceDTO>;
     public record GetPaymentsQuery(bool? successfull = null, int? userId = null, string? order = "") : IRequest<IEnumerable<PaymentDTO>>;
+    public record GetPaymentQuery(int Id) : IRequest<PaymentDTO>;
 }

@@ -19,7 +19,7 @@ namespace BillingAPI.Controllers
         /// <summary>
         /// Get all users
         /// </summary>
-        /// <param name="order">"asc" for ascending order, "desc" for descending order</param>
+        /// <param name="order">"asc" for ascending order, "desc" for descending id</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll(string? order)

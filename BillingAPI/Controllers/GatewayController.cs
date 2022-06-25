@@ -19,7 +19,7 @@ namespace BillingAPI.Controllers
         /// <summary>
         /// get all gateways
         /// </summary>
-        /// <param name="order">"asc" for ascending, "desc" for descending</param>
+        /// <param name="order">"asc" for ascending, "desc" for descending id</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GatewayDTO>>> GetAll(string? order)

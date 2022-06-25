@@ -20,7 +20,7 @@ namespace BillingAPI.Controllers
         /// Get all balances
         /// </summary>
         /// <param name="userId">Filter by user</param>
-        /// <param name="order">"asc" for ascending, "desc" for descending</param>
+        /// <param name="order">"asc" for ascending, "desc" for descending id</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BalanceDTO>>> GetBalances(int? userId = null, string? order = "")
