@@ -1,12 +1,14 @@
 ﻿using BillingAPI.DTOs.Order;
 using BillingAPI.Mediatr;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -37,6 +39,7 @@ namespace BillingAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<ReceiptDTO>> AddOrder(ProcessOrderDTO processOrderDTO)
         {
             return Ok(await _mediator.Send(new AddOrderCommand(processOrderDTO)));

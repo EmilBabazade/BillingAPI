@@ -14,11 +14,11 @@
             _env = env;
         }
 
-        public Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             PathString path = context.Request.Path;
             _logger.LogInformation($"\n****{path}****");
-            return Task.CompletedTask;
+            await _next(context);
         }
     }
 }

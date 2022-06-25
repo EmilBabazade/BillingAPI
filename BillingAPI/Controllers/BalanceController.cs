@@ -1,12 +1,14 @@
 ﻿using BillingAPI.DTOs.Balance;
 using BillingAPI.Mediatr;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BalanceController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -35,6 +37,7 @@ namespace BillingAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<BalanceDTO>> AddBalance(AddBalanceDTO addBalanceDTO)
         {
             return Ok(await _mediator.Send(new AddBalanceCommand(addBalanceDTO)));

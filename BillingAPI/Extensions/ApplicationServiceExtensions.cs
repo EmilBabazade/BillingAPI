@@ -1,5 +1,6 @@
 ﻿using BillingAPI.Data;
 using BillingAPI.Helpers;
+using BillingAPI.Services.jwt;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ namespace BillingAPI.Extensions
         {
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddMediatR(typeof(Program));
+            services.AddScoped<IJWTService, JWTService>();
             services.AddDbContext<DataContext>(options =>
             {
                 options.UseSqlite(config.GetConnectionString("DefaultConnection"));

@@ -26,6 +26,10 @@ namespace BillingAPI.Data
             builder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+
+            builder.Entity<Account>()
+                .HasIndex(a => a.Username)
+                .IsUnique();
         }
 
         public virtual DbSet<Balance> Balances { get; set; }
@@ -33,5 +37,6 @@ namespace BillingAPI.Data
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
     }
 }

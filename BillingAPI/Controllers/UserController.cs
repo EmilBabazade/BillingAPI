@@ -1,12 +1,14 @@
 ﻿using BillingAPI.DTOs.User;
 using BillingAPI.Mediatr;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IMediator _mediatr;
