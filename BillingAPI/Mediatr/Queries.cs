@@ -1,5 +1,6 @@
 ﻿using BillingAPI.DTOs.Balance;
 using BillingAPI.DTOs.Gateway;
+using BillingAPI.DTOs.Order;
 using BillingAPI.DTOs.Payment;
 using BillingAPI.DTOs.User;
 using MediatR;
@@ -14,4 +15,5 @@ namespace BillingAPI.Mediatr
     public record GetBalanceQuery(int id) : IRequest<BalanceDTO>;
     public record GetPaymentsQuery(bool? successfull = null, int? userId = null, string? order = "") : IRequest<IEnumerable<PaymentDTO>>;
     public record GetPaymentQuery(int Id) : IRequest<PaymentDTO>;
+    public record GetOrdersQuery(string order = "", int? userId = null, int? gatewayId = null) : IRequest<IEnumerable<OrderDTO>>;
 }
