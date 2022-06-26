@@ -1,6 +1,9 @@
 # BillingAPI
 Created using .Net 6 and Mediatr CQRS
 
+## Swagger
+Run the API in Visual Studio or run from terminal and go to https://localhost:7213/swagger/index.html to see the swagger docs
+
 ## Entities
 
 ### Gateway
