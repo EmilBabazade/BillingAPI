@@ -30,4 +30,4 @@ Here the authorization is only for managing Gateways, orders, seeing all the dat
 (since this is a toy api, user balance can be increased willy nilly. Normally there would be some kind of bank api that would verify user before adding balance or processing orders ).
 
 ## Testing
-I have only written tests for 2 controller handlers, since the rest of handlers have more or less same testing scenarios, i didn't want to copy paste the same thing over and over ( since this is a toy api, there would be more logic to each handler and it would be very critical to test each handler, even if the logic was same ).
+I have only written tests for 2 controller handlers, since the rest of handlers have more or less same testing scenarios, i didn't want to copy paste the same thing over and over since this is a toy api ( there would be more logic to each handler and it would be very critical to test each handler, even if the logic was same ).
