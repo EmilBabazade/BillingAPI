@@ -4,6 +4,9 @@ Created using .Net 6 and Mediatr CQRS
 ## Swagger
 Run the API in Visual Studio or run from terminal and go to https://localhost:7213/swagger/index.html to see the swagger docs
 
+## Repository pattern
+There is a repisotry branch with an older version of the api written with repository pattern if you want to see that for some reason (it is an older version tho, so it doesn't have the same "features")
+
 ## Entities
 
 ### Gateway
