@@ -20,20 +20,29 @@ namespace BillingAPI.API.Account.Handlers
         public async Task<AccountDTO> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             LoginDTO loginDTO = request.LoginDTO;
-            // check user exists
-            AccountEntity? user = await _dataContext.Accounts.SingleOrDefaultAsync(a => a.Username.Trim() == request.LoginDTO.Username);
-            if (user == null)
-                throw new BadRequestException("User not found");
 
-            // check user password
-            if (!_jwt.VerifyPasswordHash(loginDTO.Password, user.PasswordHash, user.PasswordSalt))
-                throw new BadRequestException("Wrong password");
+            AccountEntity? user = await GetUser(request);
+            CheckPassword(loginDTO, user);
 
             return new AccountDTO
             {
                 Token = _jwt.CreateToken(user),
                 UserName = loginDTO.Username,
             };
+        }
+
+        private void CheckPassword(LoginDTO loginDTO, AccountEntity user)
+        {
+            if (!_jwt.VerifyPasswordHash(loginDTO.Password, user.PasswordHash, user.PasswordSalt))
+                throw new BadRequestException("Wrong password");
+        }
+
+        private async Task<AccountEntity> GetUser(LoginCommand request)
+        {
+            AccountEntity? user = await _dataContext.Accounts.SingleOrDefaultAsync(a => a.Username.Trim() == request.LoginDTO.Username);
+            if (user == null)
+                throw new BadRequestException("User not found");
+            return user;
         }
     }
 }

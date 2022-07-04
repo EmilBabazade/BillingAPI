@@ -18,9 +18,13 @@ namespace BillingAPI.API.Account.Handlers
         }
         public async Task<Unit> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
-            // check if username is unique
-            if (await _dataContext.Accounts.AnyAsync(a => a.Username.Trim() == request.RegisterDTO.Username.Trim()))
-                throw new BadRequestException("Account with given username already exists");
+            await CheckUsernameIsUnique(request);
+            await AddUser(request);
+            return Unit.Value;
+        }
+
+        private async Task AddUser(RegisterCommand request)
+        {
             _jwt.CreatePasswordHash(request.RegisterDTO.Password, out byte[] passwordHash, out byte[] passwordSalt);
             _dataContext.Add(new AccountEntity
             {
@@ -29,7 +33,12 @@ namespace BillingAPI.API.Account.Handlers
                 PasswordSalt = passwordSalt
             });
             await _dataContext.SaveChangesAsync();
-            return Unit.Value;
+        }
+
+        private async Task CheckUsernameIsUnique(RegisterCommand request)
+        {
+            if (await _dataContext.Accounts.AnyAsync(a => a.Username.Trim() == request.RegisterDTO.Username.Trim()))
+                throw new BadRequestException("Account with given username already exists");
         }
     }
 }
