@@ -1,4 +1,7 @@
-﻿using BillingAPI.Entities;
+﻿using BillingAPI.API.Balance;
+using BillingAPI.API.Gateway;
+using BillingAPI.API.Payments;
+using BillingAPI.API.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace BillingAPI.Data
@@ -8,32 +11,32 @@ namespace BillingAPI.Data
         public static async Task SeedData(DataContext dataContext)
         {
             if (await dataContext.Users.AnyAsync()) return;
-            List<Gateway>? gateways = new List<Gateway>()
+            List<GatewayEntity>? gateways = new List<GatewayEntity>()
             {
-                new Gateway
+                new GatewayEntity
                 {
                     No = "gt1",
                 },
-                new Gateway
+                new GatewayEntity
                 {
                     No = "gt2"
                 },
-                new Gateway
+                new GatewayEntity
                 {
                     No = "gt3"
                 }
             };
             dataContext.AddRange(gateways);
             dataContext.SaveChanges();
-            List<User>? users = new List<User>()
+            List<UserEntity>? users = new List<UserEntity>()
             {
-                new User
+                new UserEntity
                 {
                     Email = "emil.babazade@gmail.com",
                     Name = "Emil",
                     Surname = "Babazade"
                 },
-                new User
+                new UserEntity
                 {
                     Email = "admin@admin.com",
                     Name = "admin",
@@ -42,9 +45,9 @@ namespace BillingAPI.Data
             };
             dataContext.AddRange(users);
             dataContext.SaveChanges();
-            List<Payment>? payments = new List<Payment>()
+            List<PaymentEntity>? payments = new List<PaymentEntity>()
             {
-                new Payment
+                new PaymentEntity
                 {
                     Amount = 100,
                     Description = "adding to balance",
@@ -52,7 +55,7 @@ namespace BillingAPI.Data
                     IsSuccessfull = true,
                     UserId = users[0].Id
                 },
-                new Payment
+                new PaymentEntity
                 {
                     Amount = 200,
                     Description = "adding to balance",
@@ -63,15 +66,15 @@ namespace BillingAPI.Data
             };
             dataContext.AddRange(payments);
             dataContext.SaveChanges();
-            List<Balance>? balances = new List<Balance>()
+            List<BalanceEntity>? balances = new List<BalanceEntity>()
             {
-                new Balance
+                new BalanceEntity
                 {
                     Amount = payments[0].Amount,
                     PaymentId = payments[0].Id,
                     UserId = users[0].Id
                 },
-                new Balance
+                new BalanceEntity
                 {
                     Amount = payments[1].Amount,
                     PaymentId = payments[1].Id,

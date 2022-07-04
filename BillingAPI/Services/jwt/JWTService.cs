@@ -1,4 +1,4 @@
-﻿using BillingAPI.Entities;
+﻿using BillingAPI.API.Account;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -22,7 +22,7 @@ namespace BillingAPI.Services.jwt
             passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
         }
 
-        public string CreateToken(Account account)
+        public string CreateToken(AccountEntity account)
         {
             List<Claim> claims = new()
             {

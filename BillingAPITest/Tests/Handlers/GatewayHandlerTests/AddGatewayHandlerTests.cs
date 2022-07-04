@@ -1,7 +1,6 @@
-﻿using BillingAPI.DTOs.Gateway;
-using BillingAPI.Entities;
-using BillingAPI.Mediatr;
-using BillingAPI.Mediatr.Handlers.GatewayHandlers;
+﻿using BillingAPI.API.Gateway;
+using BillingAPI.API.Gateway.DTOs;
+using BillingAPI.API.Gateway.Handlers;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -34,7 +33,7 @@ namespace BillingAPITest.Tests.Handlers.GatewayHandlerTests
 
             // Act
             GatewayDTO? createdGateway = await _handler.Handle(new AddGatewayCommand(g), new CancellationToken());
-            List<Gateway>? gatewaysInDb = await _dataContext.Gateways.ToListAsync();
+            List<GatewayEntity>? gatewaysInDb = await _dataContext.Gateways.ToListAsync();
 
             // Assert
             createdGateway.Should().NotBeNull();

@@ -1,6 +1,6 @@
-﻿using BillingAPI.Entities;
-using BillingAPI.Mediatr;
-using BillingAPI.Mediatr.Handlers.UserHandlers;
+﻿using BillingAPI.API.User;
+using BillingAPI.API.User.Handlers;
+
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -30,8 +30,8 @@ namespace BillingAPITest.Tests.Handlers.UsersHandlerTests
 
             // Act
             await _handler.Handle(new DeleteUserCommand(deleteId), new CancellationToken());
-            User? deletedUser = await _dataContext.Users.FindAsync(deleteId);
-            List<User>? usersInDB = await _dataContext.Users.ToListAsync();
+            UserEntity? deletedUser = await _dataContext.Users.FindAsync(deleteId);
+            List<UserEntity>? usersInDB = await _dataContext.Users.ToListAsync();
 
             // Assert
             deletedUser.Should().BeNull();

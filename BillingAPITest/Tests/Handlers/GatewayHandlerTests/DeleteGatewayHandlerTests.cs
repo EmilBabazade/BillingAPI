@@ -1,6 +1,6 @@
-﻿using BillingAPI.Entities;
-using BillingAPI.Mediatr;
-using BillingAPI.Mediatr.Handlers.GatewayHandlers;
+﻿using BillingAPI.API.Gateway;
+using BillingAPI.API.Gateway.Handlers;
+
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -30,8 +30,8 @@ namespace BillingAPITest.Tests.Handlers.GatewayHandlerTests
 
             // Act
             await _handler.Handle(new DeleteGatewayCommand(deleteId), new CancellationToken());
-            Gateway? deletedGateway = await _dataContext.Gateways.FindAsync(deleteId);
-            List<Gateway>? gatewaysInDB = await _dataContext.Gateways.ToListAsync();
+            GatewayEntity? deletedGateway = await _dataContext.Gateways.FindAsync(deleteId);
+            List<GatewayEntity>? gatewaysInDB = await _dataContext.Gateways.ToListAsync();
 
             // Assert
             deletedGateway.Should().BeNull();

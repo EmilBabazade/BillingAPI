@@ -1,6 +1,7 @@
-﻿using BillingAPI.DTOs.User;
-using BillingAPI.Mediatr;
-using BillingAPI.Mediatr.Handlers.UserHandlers;
+﻿using BillingAPI.API.User;
+using BillingAPI.API.User.DTOs;
+using BillingAPI.API.User.Handlers;
+
 using FluentAssertions;
 using NUnit.Framework;
 using System.Collections.Generic;

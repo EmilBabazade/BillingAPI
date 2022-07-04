@@ -1,6 +1,7 @@
-﻿using BillingAPI.DTOs.Gateway;
-using BillingAPI.Mediatr;
-using BillingAPI.Mediatr.Handlers.GatewayHandlers;
+﻿using BillingAPI.API.Gateway;
+using BillingAPI.API.Gateway.DTOs;
+using BillingAPI.API.Gateway.Handlers;
+
 using FluentAssertions;
 using NUnit.Framework;
 using System;

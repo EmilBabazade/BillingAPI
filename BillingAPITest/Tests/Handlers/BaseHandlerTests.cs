@@ -1,6 +1,10 @@
 ﻿using AutoMapper;
+using BillingAPI.API.Balance;
+using BillingAPI.API.Gateway;
+using BillingAPI.API.Order;
+using BillingAPI.API.Payments;
+using BillingAPI.API.User;
 using BillingAPI.Data;
-using BillingAPI.Entities;
 using BillingAPI.Helpers;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -49,27 +53,27 @@ namespace BillingAPITest.Tests
             await _dataContext.SaveChangesAsync();
         }
 
-        protected List<Gateway> _gateways = new();
-        protected List<Balance> _balances = new();
-        protected List<User> _users = new();
-        protected List<Payment> _payments = new();
-        protected List<Order> _orders = new();
+        protected List<GatewayEntity> _gateways = new();
+        protected List<BalanceEntity> _balances = new();
+        protected List<UserEntity> _users = new();
+        protected List<PaymentEntity> _payments = new();
+        protected List<OrderEntity> _orders = new();
 
         [SetUp]
         public async Task SeedData()
         {
             // add gateways
-            _gateways = new List<Gateway>()
+            _gateways = new List<GatewayEntity>()
             {
-                new Gateway
+                new GatewayEntity
                 {
                     No = "gt1"
                 },
-                new Gateway
+                new GatewayEntity
                 {
                     No = "gt2"
                 },
-                new Gateway
+                new GatewayEntity
                 {
                     No = "gt3"
                 }
@@ -78,19 +82,19 @@ namespace BillingAPITest.Tests
             // add users
             _users = new()
             {
-                new User
+                new UserEntity
                 {
                     Email = "bob@bob.com",
                     Name = "bob",
                     Surname = "bobby"
                 },
-                new User
+                new UserEntity
                 {
                     Email = "bob2@bob.com",
                     Name = "bob2",
                     Surname = "bobby2"
                 },
-                new User
+                new UserEntity
                 {
                     Email = "bob3@bob.com",
                     Name = "bob3",
@@ -101,7 +105,7 @@ namespace BillingAPITest.Tests
             // add payments for balances
             _payments = new()
             {
-                new Payment
+                new PaymentEntity
                 {
                     Amount = 100,
                     Description = "adding to balance",
@@ -109,7 +113,7 @@ namespace BillingAPITest.Tests
                     IsSuccessfull = true,
                     UserId = _users[0].Id
                 },
-                new Payment
+                new PaymentEntity
                 {
                     Amount = 150,
                     Description = "adding to balance",
@@ -117,7 +121,7 @@ namespace BillingAPITest.Tests
                     IsSuccessfull = true,
                     UserId = _users[1].Id
                 },
-                new Payment
+                new PaymentEntity
                 {
                     Amount = 50,
                     Description = "adding to balance",
@@ -131,19 +135,19 @@ namespace BillingAPITest.Tests
             // add balance
             _balances = new()
             {
-                new Balance
+                new BalanceEntity
                 {
                     Amount = _payments[0].Amount,
                     PaymentId = _payments[0].Id,
                     UserId = _users[0].Id
                 },
-                new Balance
+                new BalanceEntity
                 {
                     Amount = _payments[1].Amount,
                     PaymentId = _payments[1].Id,
                     UserId = _users[1].Id
                 },
-                new Balance
+                new BalanceEntity
                 {
                     Amount = _payments[2].Amount,
                     PaymentId = _payments[2].Id,
@@ -152,21 +156,21 @@ namespace BillingAPITest.Tests
             };
             _dataContext.AddRange(_balances);
             // add payments
-            List<Payment>? orderPayments = new List<Payment>
+            List<PaymentEntity>? orderPayments = new List<PaymentEntity>
             {
-                new Payment
+                new PaymentEntity
                 {
                     Amount = -20,
                     IsSuccessfull = true,
                     UserId = _users[0].Id
                 },
-                new Payment
+                new PaymentEntity
                 {
                     Amount = -30,
                     IsSuccessfull = true,
                     UserId = _users[1].Id
                 },
-                new Payment
+                new PaymentEntity
                 {
                     Amount = -15,
                     IsSuccessfull = true,
@@ -175,21 +179,21 @@ namespace BillingAPITest.Tests
             };
             await _dataContext.AddRangeAsync(orderPayments);
             _payments.AddRange(orderPayments);
-            _orders = new List<Order>()
+            _orders = new List<OrderEntity>()
             {
-                new Order
+                new OrderEntity
                 {
                     No = "234",
                     PayableAmount = -20,
                     UserId = _users[0].Id
                 },
-                new Order
+                new OrderEntity
                 {
                     No = "235",
                     PayableAmount = -30,
                     UserId = _users[1].Id
                 },
-                new Order
+                new OrderEntity
                 {
                     No = "236",
                     PayableAmount = -15,

@@ -1,7 +1,7 @@
-﻿using BillingAPI.DTOs.User;
-using BillingAPI.Entities;
-using BillingAPI.Mediatr;
-using BillingAPI.Mediatr.Handlers.UserHandlers;
+﻿using BillingAPI.API.User;
+using BillingAPI.API.User.DTOs;
+using BillingAPI.API.User.Handlers;
+
 using FluentAssertions;
 using NUnit.Framework;
 using System;
@@ -25,7 +25,7 @@ namespace BillingAPITest.Tests.Handlers.UsersHandlerTests
         public async Task GetByIdShouldReturnCorrectUser()
         {
             // Arrange
-            User? user = _users[1];
+            UserEntity? user = _users[1];
 
             // Act
             UserDTO userInDB = await _handler.Handle(new GetUserByIdQuery(user.Id), new CancellationToken());

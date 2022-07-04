@@ -1,4 +1,9 @@
-﻿using BillingAPI.Entities;
+﻿using BillingAPI.API.Account;
+using BillingAPI.API.Balance;
+using BillingAPI.API.Gateway;
+using BillingAPI.API.Order;
+using BillingAPI.API.Payments;
+using BillingAPI.API.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace BillingAPI.Data
@@ -15,28 +20,28 @@ namespace BillingAPI.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Gateway>()
+            builder.Entity<GatewayEntity>()
                 .HasIndex(g => g.No)
                 .IsUnique();
 
-            builder.Entity<Order>()
+            builder.Entity<OrderEntity>()
                 .HasIndex(o => o.No)
                 .IsUnique();
 
-            builder.Entity<User>()
+            builder.Entity<UserEntity>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
-            builder.Entity<Account>()
+            builder.Entity<AccountEntity>()
                 .HasIndex(a => a.Username)
                 .IsUnique();
         }
 
-        public virtual DbSet<Balance> Balances { get; set; }
-        public virtual DbSet<Gateway> Gateways { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<Payment> Payments { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<BalanceEntity> Balances { get; set; }
+        public virtual DbSet<GatewayEntity> Gateways { get; set; }
+        public virtual DbSet<OrderEntity> Orders { get; set; }
+        public virtual DbSet<PaymentEntity> Payments { get; set; }
+        public virtual DbSet<UserEntity> Users { get; set; }
+        public virtual DbSet<AccountEntity> Accounts { get; set; }
     }
 }

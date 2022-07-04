@@ -1,7 +1,7 @@
-﻿using BillingAPI.DTOs.User;
-using BillingAPI.Entities;
-using BillingAPI.Mediatr;
-using BillingAPI.Mediatr.Handlers.UserHandlers;
+﻿using BillingAPI.API.User;
+using BillingAPI.API.User.DTOs;
+using BillingAPI.API.User.Handlers;
+
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -36,7 +36,7 @@ namespace BillingAPITest.Tests.Handlers.UsersHandlerTests
 
             // Act
             UserDTO? newUser = await _handler.Handle(new AddUserCommand(u), new CancellationToken());
-            List<User> usersInDB = await _dataContext.Users.ToListAsync();
+            List<UserEntity> usersInDB = await _dataContext.Users.ToListAsync();
 
             // Assert
             newUser.Should().NotBeNull();

@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
-using BillingAPI.DTOs.Balance;
-using BillingAPI.DTOs.Gateway;
-using BillingAPI.DTOs.Order;
-using BillingAPI.DTOs.Payment;
-using BillingAPI.DTOs.User;
-using BillingAPI.Entities;
+using BillingAPI.API.Balance;
+using BillingAPI.API.Balance.DTOs;
+using BillingAPI.API.Gateway;
+using BillingAPI.API.Gateway.DTOs;
+using BillingAPI.API.Order;
+using BillingAPI.API.Order.DTOs;
+using BillingAPI.API.Payments;
+using BillingAPI.API.Payments.DTOs;
+using BillingAPI.API.User;
+using BillingAPI.API.User.DTOs;
 
 namespace BillingAPI.Helpers
 {
@@ -12,16 +16,16 @@ namespace BillingAPI.Helpers
     {
         public AutoMapperProfiles()
         {
-            CreateMap<Balance, BalanceDTO>();
-            CreateMap<Gateway, GatewayDTO>();
-            CreateMap<Order, OrderDTO>();
-            CreateMap<User, UserDTO>()
+            CreateMap<BalanceEntity, BalanceDTO>();
+            CreateMap<GatewayEntity, GatewayDTO>();
+            CreateMap<OrderEntity, OrderDTO>();
+            CreateMap<UserEntity, UserDTO>()
                 .ForMember(
                     dest => dest.Balance,
                     opts => opts.MapFrom(
                         src => src.Balances.OrderByDescending(s => s.Id).FirstOrDefault())
                 );
-            CreateMap<Payment, PaymentDTO>();
+            CreateMap<PaymentEntity, PaymentDTO>();
         }
     }
 }
