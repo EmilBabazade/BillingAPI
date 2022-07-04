@@ -19,21 +19,33 @@ namespace BillingAPI.API.Gateway.Handlers
         }
         public async Task<IEnumerable<GatewayDTO>> Handle(GetGatewaysQuery request, CancellationToken cancellationToken)
         {
-            if (request.Order == "asc")
+            return request.Order switch
             {
-                return await _dataContext.Gateways.OrderBy(b => b.Id).ProjectTo<GatewayDTO>(
-                        _mapper.ConfigurationProvider
-                    ).ToListAsync();
-            }
-            if (request.Order == "desc")
-            {
-                return await _dataContext.Gateways.OrderByDescending(b => b.Id).ProjectTo<GatewayDTO>(
-                        _mapper.ConfigurationProvider
-                    ).ToListAsync();
-            }
+                "asc" => await OrderByAcending(),
+                "desc" => await OrderByDescending(),
+                _ => await GetGatewaysWithoutOrdering()
+            };
+        }
+
+        private async Task<List<GatewayDTO>> GetGatewaysWithoutOrdering()
+        {
             return await _dataContext.Gateways.ProjectTo<GatewayDTO>(
-                        _mapper.ConfigurationProvider
-                    ).ToListAsync();
+                                    _mapper.ConfigurationProvider
+                                ).ToListAsync();
+        }
+
+        private async Task<List<GatewayDTO>> OrderByDescending()
+        {
+            return await _dataContext.Gateways.OrderByDescending(b => b.Id).ProjectTo<GatewayDTO>(
+                                    _mapper.ConfigurationProvider
+                                ).ToListAsync();
+        }
+
+        private async Task<List<GatewayDTO>> OrderByAcending()
+        {
+            return await _dataContext.Gateways.OrderBy(b => b.Id).ProjectTo<GatewayDTO>(
+                                    _mapper.ConfigurationProvider
+                                ).ToListAsync();
         }
     }
 }

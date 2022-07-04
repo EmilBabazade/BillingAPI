@@ -19,9 +19,13 @@ namespace BillingAPI.API.User.Handlers
         }
         public async Task<UserDTO> Handle(AddUserCommand request, CancellationToken cancellationToken)
         {
-            // check if email is unique
-            if (await _dataContext.Users.AnyAsync(u => u.Email == request.AddUserDTO.Email))
-                throw new BadRequestException("Another user already exists with given email");
+            await CheckEmailUnique(request);
+            UserEntity newUser = await AddUser(request);
+            return _mapper.Map<UserDTO>(newUser);
+        }
+
+        private async Task<UserEntity> AddUser(AddUserCommand request)
+        {
             UserEntity newUser = new()
             {
                 Email = request.AddUserDTO.Email,
@@ -30,7 +34,13 @@ namespace BillingAPI.API.User.Handlers
             };
             _dataContext.Users.Add(newUser);
             await _dataContext.SaveChangesAsync();
-            return _mapper.Map<UserDTO>(newUser);
+            return newUser;
+        }
+
+        private async Task CheckEmailUnique(AddUserCommand request)
+        {
+            if (await _dataContext.Users.AnyAsync(u => u.Email == request.AddUserDTO.Email))
+                throw new BadRequestException("Another user already exists with given email");
         }
     }
 }

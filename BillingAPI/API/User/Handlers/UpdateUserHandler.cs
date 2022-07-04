@@ -19,22 +19,36 @@ namespace BillingAPI.API.User.Handlers
         }
         public async Task<UserDTO> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            // check if user exists
-            UserEntity? user = await _dataContext.Users
-                .Include(u => u.Balances)
-                .Include(u => u.Orders)
-                .Include(u => u.Payments)
-                .SingleOrDefaultAsync(u => u.Id == request.UpdateUserDTO.Id);
-            if (user == null) throw new NotFoundException("User not found");
-            // check if email is unique
-            if (await _dataContext.Users.AnyAsync(u => u.Id != request.UpdateUserDTO.Id && u.Email == request.UpdateUserDTO.Email))
-                throw new BadRequestException("Another user already exists with given email");
+            UserEntity? user = await GetUser(request);
+            await CheckEmailUnique(request);
+            await UpdateUser(request, user);
+            return _mapper.Map<UserDTO>(user);
+        }
+
+        private async Task UpdateUser(UpdateUserCommand request, UserEntity user)
+        {
             user.Email = request.UpdateUserDTO.Email;
             user.Name = request.UpdateUserDTO.Name;
             user.Surname = request.UpdateUserDTO.Surname;
             _dataContext.Users.Update(user);
             await _dataContext.SaveChangesAsync();
-            return _mapper.Map<UserDTO>(user);
+        }
+
+        private async Task CheckEmailUnique(UpdateUserCommand request)
+        {
+            if (await _dataContext.Users.AnyAsync(u => u.Id != request.UpdateUserDTO.Id && u.Email == request.UpdateUserDTO.Email))
+                throw new BadRequestException("Another user already exists with given email");
+        }
+
+        private async Task<UserEntity> GetUser(UpdateUserCommand request)
+        {
+            UserEntity? user = await _dataContext.Users
+                            .Include(u => u.Balances)
+                            .Include(u => u.Orders)
+                            .Include(u => u.Payments)
+                            .SingleOrDefaultAsync(u => u.Id == request.UpdateUserDTO.Id);
+            if (user == null) throw new NotFoundException("User not found");
+            return user;
         }
     }
 }

@@ -19,21 +19,33 @@ namespace BillingAPI.API.User.Handlers
         }
         public async Task<IEnumerable<UserDTO>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
-            if (request.Order == "asc")
+            return request.Order switch
             {
-                return await _dataContext.Users.OrderBy(b => b.Id).ProjectTo<UserDTO>(
-                        _mapper.ConfigurationProvider
-                    ).ToListAsync();
-            }
-            if (request.Order == "desc")
-            {
-                return await _dataContext.Users.OrderByDescending(b => b.Id).ProjectTo<UserDTO>(
-                        _mapper.ConfigurationProvider
-                    ).ToListAsync();
-            }
+                "asc" => await OrderByAscending(),
+                "desc" => await OrderByDescending(),
+                _ => await GetUsersWithoutOrdering()
+            };
+        }
+
+        private async Task<List<UserDTO>> GetUsersWithoutOrdering()
+        {
             return await _dataContext.Users.ProjectTo<UserDTO>(
-                        _mapper.ConfigurationProvider
-                    ).ToListAsync();
+                                    _mapper.ConfigurationProvider
+                                ).ToListAsync();
+        }
+
+        private async Task<List<UserDTO>> OrderByDescending()
+        {
+            return await _dataContext.Users.OrderByDescending(b => b.Id).ProjectTo<UserDTO>(
+                                    _mapper.ConfigurationProvider
+                                ).ToListAsync();
+        }
+
+        private async Task<List<UserDTO>> OrderByAscending()
+        {
+            return await _dataContext.Users.OrderBy(b => b.Id).ProjectTo<UserDTO>(
+                                    _mapper.ConfigurationProvider
+                                ).ToListAsync();
         }
     }
 }
