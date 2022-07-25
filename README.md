@@ -1,6 +1,9 @@
 # BillingAPI
 Created using .Net 6 and Mediatr CQRS
 
+## Try it out!
+https://billingapi1.herokuapp.com/swagger/index.html
+
 ## Swagger
 Run the API in Visual Studio or run from terminal and go to https://localhost:7213/swagger/index.html to see the swagger docs
 
